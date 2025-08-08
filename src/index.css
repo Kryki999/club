@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --heading-font: 'Youth Heart', cursive;
+  --body-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  font-family: var(--body-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #111a0b;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  font-family: var(--body-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #111a0b;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  background-color: #111a0b;
+}
+
+/* Eliminate white gaps between components */
+.App {
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #111a0b;
+}
+
+/* Ensure all sections have no gaps */
+section {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #111a0b;
+}
+
+/* Fix for mobile viewport */
+@media screen and (max-width: 768px) {
+
+  html,
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    background-color: #111a0b;
+  }
+
+  .App {
+    width: 100%;
+    overflow-x: hidden;
+    background-color: #111a0b;
+  }
+
+  section {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #111a0b;
+  }
+}

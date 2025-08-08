@@ -1,0 +1,188 @@
+.banner {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #000;
+    color: #fede00;
+    top: 0;
+}
+
+.banner::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent, #111a0b);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    transform: scale(1.2);
+}
+
+.video-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.2rem;
+    z-index: 2;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #fede00;
+    padding: 0 2rem;
+}
+
+.banner-title {
+    font-size: 6.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Young Heart', sans-serif;
+}
+
+.banner-subtitle {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family: 'Poiret One', sans-serif;
+}
+
+.banner-button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-family: 'Afacad', sans-serif;
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.banner-button:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .banner-content {
+        margin-left: 5%;
+        max-width: 500px;
+    }
+
+    .banner-title {
+        font-size: 3rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .banner {
+        height: 100vh;
+        min-height: 100vh;
+    }
+
+    .banner-content {
+        padding: 0 1rem;
+        height: 100%;
+    }
+
+    .banner-title {
+        font-size: 3.5rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .banner-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .background-video {
+        transform: scale(1.4);
+        object-position: center;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .banner {
+        height: 100vh;
+        min-height: 100vh;
+    }
+
+    .banner-content {
+        padding: 0 1rem;
+    }
+
+    .banner-title {
+        font-size: 2.8rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1rem;
+    }
+
+    .background-video {
+        transform: scale(1.5);
+        object-position: center;
+    }
+}

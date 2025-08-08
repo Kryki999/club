@@ -1,0 +1,238 @@
+.about-section {
+    background-color: #111a0b;
+    padding: 80px 0;
+    position: relative;
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.about-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fede00;
+    margin: 0;
+    font-family: 'Poiret One', sans-serif;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.about-description {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-description p {
+    color: #ffffff;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin: 0;
+    font-family: 'Afacad', sans-serif;
+    text-align: left;
+}
+
+.about-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.contact-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.about-contact h3 {
+    color: #fede00;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    font-family: 'Afacad', sans-serif;
+}
+
+.phone-number {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Afacad', sans-serif;
+    justify-content: flex-start;
+}
+
+.phone-number svg {
+    color: #fede00;
+    font-size: 1.3rem;
+}
+
+.call-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fede00;
+    color: #111a0b;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Afacad', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+.call-button:hover {
+    background: transparent;
+    color: #fede00;
+    border: 2px solid #fede00;
+    transform: translateY(-2px);
+}
+
+.call-button svg {
+    font-size: 1.2rem;
+}
+
+.about-image {
+    width: 100%;
+    height: 400px;
+    border: 1px solid #fede00;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    aspect-ratio: 1;
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+    .about-section {
+        padding: 60px 0;
+    }
+
+    .about-content {
+        gap: 40px;
+    }
+
+    .about-title {
+        font-size: 2.2rem;
+    }
+
+    .about-description p {
+        font-size: 1rem;
+    }
+
+    .about-image {
+        height: 350px;
+        aspect-ratio: 1;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .about-section {
+        padding: 40px 0;
+    }
+
+    .about-container {
+        padding: 0 15px;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .about-title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .about-description p {
+        font-size: 0.95rem;
+        text-align: center;
+    }
+
+    .about-contact {
+        align-items: center;
+        text-align: center;
+    }
+
+    .contact-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .about-contact h3 {
+        font-size: 1.3rem;
+    }
+
+    .phone-number {
+        font-size: 1.1rem;
+        justify-content: center;
+    }
+
+    .about-image {
+        height: 300px;
+        aspect-ratio: 1;
+        order: -1;
+        /* Image appears first on mobile */
+    }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+    .about-title {
+        font-size: 1.8rem;
+    }
+
+    .about-description p {
+        font-size: 0.9rem;
+    }
+
+    .about-contact h3 {
+        font-size: 1.2rem;
+    }
+
+    .phone-number {
+        font-size: 1rem;
+    }
+
+    .call-button {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+
+    .about-image {
+        height: 250px;
+        aspect-ratio: 1;
+    }
+}

@@ -1,0 +1,279 @@
+.navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    height: 80px;
+}
+
+.navigation.scrolled {
+    background-color: #0a1206;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-brand {
+    font-family: 'Young Heart', sans-serif;
+}
+
+.nav-brand a {
+    font-size: 2.8rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fede00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navigation.scrolled .nav-brand a {
+    font-size: 2rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #fede00;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #fff;
+}
+
+.nav-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Afacad', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #fede00;
+    border: 2px solid #fede00;
+}
+
+.nav-button.reservation {
+    border: 2px solid #fede00;
+}
+
+.nav-button.phone {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid #fede00;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.phone-text {
+    display: inline;
+}
+
+.phone-rezerwuj {
+    display: none;
+}
+
+.nav-button.ticket {
+    background-color: #007bff;
+    color: white;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-mobile-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.nav-social {
+    color: #fede00;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.nav-social:hover {
+    color: #fff;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: #fede00;
+    transition: all 0.3s ease;
+}
+
+.hamburger-line.open:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-line.open:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+.mobile-menu {
+    font-family: 'Afacad', sans-serif;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 80px 2rem 2rem;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+}
+
+.mobile-menu.open {
+    display: flex;
+    transform: translateX(0);
+}
+
+.mobile-link {
+    text-decoration: none;
+    color: #fede00;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.mobile-button {
+    padding: 1rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mobile-button.reservation {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.mobile-button.ticket {
+    background-color: #007bff;
+    color: white;
+}
+
+@media (max-width: 1024px) {
+
+    .nav-left,
+    .nav-right {
+        gap: 1rem;
+    }
+
+    .nav-brand a {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 1300px) {
+
+    .nav-left,
+    .nav-right {
+        display: none;
+    }
+
+    .nav-mobile-right {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .mobile-menu {
+        display: flex;
+    }
+
+    .nav-brand {
+        position: static;
+        transform: none;
+    }
+
+    .nav-button.phone {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-brand a {
+        font-size: 2.2rem;
+    }
+
+    .navigation.scrolled .nav-brand a {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-button.phone {
+        padding: 0.5rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .phone-text {
+        display: none;
+    }
+
+    .phone-rezerwuj {
+        display: inline;
+    }
+
+    .nav-brand a {
+        font-size: 1.6rem;
+    }
+
+    .navigation.scrolled .nav-brand a {
+        font-size: 1.2rem;
+    }
+
+    .nav-social {
+        display: none;
+    }
+}

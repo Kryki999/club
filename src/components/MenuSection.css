@@ -1,0 +1,139 @@
+.menu-section {
+    padding: 4rem 2rem;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1;
+    background-color: #111a0b;
+}
+
+.menu-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #fede00;
+}
+
+.menu-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.menu-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.menu-tab {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    color: #fede00;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.menu-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #fede00;
+    transition: width 0.3s ease;
+}
+
+.menu-tab:hover {
+    color: #fede00;
+}
+
+.menu-tab:hover::after {
+    width: 100%;
+}
+
+.menu-tab.active {
+    color: #fede00;
+    font-weight: bold;
+}
+
+.menu-tab.active::after {
+    width: 100%;
+}
+
+.menu-content {
+    padding: 2rem 0;
+}
+
+.menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.menu-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(254, 222, 0, 0.2);
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+}
+
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.menu-item-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #fede00;
+}
+
+.price {
+    font-weight: bold;
+    color: #fede00;
+}
+
+.description {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .menu-section {
+        padding: 3rem 1rem;
+    }
+
+    .menu-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .menu-tabs {
+        gap: 0.5rem;
+    }
+
+    .menu-tab {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+    }
+
+    .menu-items {
+        grid-template-columns: 1fr;
+    }
+}

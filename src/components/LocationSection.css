@@ -1,0 +1,223 @@
+.location-section {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.location-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, #111a0b, transparent);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.location-title {
+    font-size: 3rem;
+    color: #fede00;
+    font-family: 'Poiret One', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    font-weight: 700;
+}
+
+.map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.location-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111a0b;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+}
+
+.location-info {
+    display: flex;
+    align-items: center;
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.location-icon {
+    color: #fede00;
+    font-size: 1.5rem;
+}
+
+.address-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.address-street {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Afacad', sans-serif;
+}
+
+.address-city {
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: 'Afacad', sans-serif;
+}
+
+.social-media {
+    display: flex;
+    gap: 20px;
+}
+
+.social-link {
+    color: #fede00;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-link:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+    .location-section {
+        height: 450px;
+    }
+
+    .location-title {
+        font-size: 2.5rem;
+    }
+
+    .location-footer {
+        padding: 15px 30px;
+    }
+
+    .social-link {
+        font-size: 1.6rem;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .location-section {
+        height: 400px;
+    }
+
+    .location-overlay {
+        height: 150px;
+    }
+
+    .location-title {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+
+    .location-footer {
+        padding: 12px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .address-item {
+        gap: 10px;
+    }
+
+    .location-icon {
+        font-size: 1.3rem;
+    }
+
+    .address-street {
+        font-size: 1rem;
+    }
+
+    .address-city {
+        font-size: 0.9rem;
+    }
+
+    .social-media {
+        gap: 15px;
+    }
+
+    .social-link {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+    .location-section {
+        height: 350px;
+    }
+
+    .location-overlay {
+        height: 120px;
+    }
+
+    .location-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+    }
+
+    .location-footer {
+        padding: 10px 15px;
+        gap: 12px;
+    }
+
+    .address-item {
+        gap: 8px;
+    }
+
+    .location-icon {
+        font-size: 1.2rem;
+    }
+
+    .address-street {
+        font-size: 0.9rem;
+    }
+
+    .address-city {
+        font-size: 0.8rem;
+    }
+
+    .social-media {
+        gap: 12px;
+    }
+
+    .social-link {
+        font-size: 1.3rem;
+    }
+}

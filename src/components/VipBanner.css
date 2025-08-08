@@ -1,0 +1,109 @@
+.vip-banner {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+}
+
+.vip-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    z-index: 1;
+}
+
+.vip-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.vip-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fede00;
+    font-family: 'Poiret One', sans-serif;
+}
+
+.vip-subtitle {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+    color: #ffd700;
+    font-family: 'Poiret One', sans-serif;
+}
+
+.vip-description {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-family: 'Afacad', sans-serif;
+}
+
+.vip-button {
+    background-color: transparent;
+    color: white;
+    border: 2px solid #fede00;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    font-family: 'Afacad', sans-serif;
+    font-weight: 600;
+}
+
+.vip-button:hover {
+    background-color: #fede00;
+    color: #111a0b;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .vip-banner {
+        height: auto;
+        padding: 4rem 1rem;
+        background-attachment: scroll;
+    }
+
+    .vip-title {
+        font-size: 2.5rem;
+    }
+
+    .vip-subtitle {
+        font-size: 1.5rem;
+    }
+
+    .vip-description {
+        font-size: 1rem;
+    }
+
+    .vip-button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
