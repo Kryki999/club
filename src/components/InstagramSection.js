@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { RiInstagramFill } from 'react-icons/ri';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import './InstagramSection.css';
 
 function InstagramSection() {
@@ -102,7 +103,7 @@ function InstagramSection() {
             </div>
             <div className="instagram-container">
                 <Swiper
-                    modules={[Autoplay, Pagination]}
+                    modules={[Autoplay, Pagination, Navigation]}
                     spaceBetween={20}
                     slidesPerView={1}
                     breakpoints={{
@@ -127,6 +128,7 @@ function InstagramSection() {
                         clickable: true,
                         el: '.custom-instagram-pagination',
                     }}
+                    navigation={true}
                     loop={true}
                     className="instagram-swiper"
                 >

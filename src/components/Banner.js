@@ -22,14 +22,14 @@ const Banner = () => {
                     muted
                     loop
                     playsInline
+                    preload="metadata"
+                    poster="/preloadbanner.png"
                     className="background-video"
+                    onLoadedMetadata={() => setIsVideoLoaded(true)}
                     onLoadedData={() => setIsVideoLoaded(true)}
                     onError={(e) => console.error("Video error:", e)}
                 >
-                    <source
-                        src="/videos/banner.mp4"
-                        type="video/mp4"
-                    />
+                    <source src="/videos/bannernew.mp4" type="video/mp4" />
                     Twoja przeglądarka nie wspiera tagu video.
                 </video>
                 {!isVideoLoaded && (
