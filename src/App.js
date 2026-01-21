@@ -1,33 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation';
-import Banner from './components/Banner';
-import MarqueeBanner from './components/MarqueeBanner';
-import ServicesSection from './components/ServicesSection';
-import EventsSection from './components/EventsSection';
-import InstagramSection from './components/InstagramSection';
-import VipBanner from './components/VipBanner';
-import AboutSection from './components/AboutSection';
-import SponsorsSection from './components/SponsorsSection';
-import ReviewsSection from './components/ReviewsSection';
-import MenuSection from './components/MenuSection';
-import LocationSection from './components/LocationSection';
 import Footer from './components/Footer';
-function App() {
+import HomePage from './pages/HomePage';
+import ReservationPage from './pages/ReservationPage';
+import EventPickerModal from './components/EventPickerModal';
+
+function AppContent() {
+  const navigate = useNavigate();
+  const [isEventPickerOpen, setIsEventPickerOpen] = useState(false);
+
+  const handleOpenReservation = () => {
+    setIsEventPickerOpen(true);
+  };
+
+  const handleSelectEvent = (event) => {
+    setIsEventPickerOpen(false);
+    navigate(`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.name)}`);
+  };
+
   return (
     <div className="App">
-      <Navigation />
-      <Banner />
-      <EventsSection />
-      <ServicesSection />
-      <InstagramSection />
-      <MarqueeBanner />
-      <VipBanner />
-      <AboutSection />
-      <ReviewsSection />
-      <LocationSection />
+      <Navigation onOpenReservation={handleOpenReservation} />
+      <Routes>
+        <Route path="/" element={<HomePage onOpenReservation={handleOpenReservation} />} />
+        <Route path="/reservation" element={<ReservationPage onOpenReservation={handleOpenReservation} />} />
+      </Routes>
       <Footer />
+
+      <EventPickerModal
+        isOpen={isEventPickerOpen}
+        onSelectEvent={handleSelectEvent}
+        onClose={() => setIsEventPickerOpen(false)}
+      />
     </div>
+  );
+}
+
+import { CartProvider } from './context/CartContext';
+
+function App() {
+  return (
+    <CartProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </CartProvider>
   );
 }
 

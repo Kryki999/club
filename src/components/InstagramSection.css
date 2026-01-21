@@ -56,32 +56,70 @@
 }
 
 .instagram-container {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 60px;
+    padding: 0;
     position: relative;
 }
 
-.instagram-swiper {
+.wrapper {
+    max-width: 1200px;
     width: 100%;
-    height: 100%;
+    padding: 20px 10px;
+    margin: 0 auto 35px;
+    overflow: visible;
+    position: relative;
 }
 
-/* Swiper navigation styles - match Reviews small arrows */
-.instagram-swiper .swiper-button-next,
-.instagram-swiper .swiper-button-prev {
-    color: #fede00;
-    background: transparent;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-top: -20px;
+/* Embla Carousel Styles */
+.embla {
+    overflow: hidden;
+    padding: 10px;
+    margin: -10px;
 }
 
-.instagram-swiper .swiper-button-next:after,
-.instagram-swiper .swiper-button-prev:after {
-    font-size: 18px;
+.embla__container {
+    display: flex;
 }
+
+.embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+/* Responsive Slide Widths */
+@media (min-width: 640px) {
+    .embla__slide {
+        flex: 0 0 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .embla__slide {
+        flex: 0 0 33.333%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .embla__slide {
+        flex: 0 0 33.333%;
+    }
+}
+
+/* Custom widths for single items */
+@media (min-width: 640px) {
+    .embla__slide--single {
+        flex: 0 0 60% !important;
+        /* Larger single item */
+    }
+}
+
+.embla__container--center {
+    justify-content: center;
+}
+
 
 .instagram-card {
     display: block;
@@ -91,6 +129,7 @@
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
 }
 
 .instagram-card:hover {
@@ -115,54 +154,102 @@
     transform: scale(1.05);
 }
 
-/* Swiper pagination styles */
-.custom-instagram-pagination {
-    width: 100%;
-    position: relative;
+/* Embla Navigation Buttons */
+.embla__button {
+    outline: 0;
+    cursor: pointer;
+    background-color: transparent;
+    touch-action: manipulation;
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    fill: #fede00;
+    padding: 0;
+    color: #fede00;
+    border-radius: 50%;
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.embla__button svg {
+    width: 35px;
+    height: 35px;
+}
+
+.embla__button:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.embla__button--prev {
+    left: -50px;
+}
+
+.embla__button--next {
+    right: -50px;
+}
+
+
+/* Embla Pagination Dots */
+.embla__dots {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 25px;
+    padding-top: 20px;
 }
 
-.instagram-swiper .swiper-pagination-bullet {
-    height: 12px;
-    width: 12px;
-    opacity: 1;
-    overflow: hidden;
+.embla__dot {
+    background-color: transparent;
+    cursor: pointer;
     position: relative;
-    background: rgba(254, 222, 0, 0.3);
+    padding: 0;
+    outline: 0;
+    border: 0;
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.wrapper .embla__dot {
+    width: 15px;
+    height: 15px;
     margin: 0 5px;
+    border-radius: 50%;
+    background: rgba(254, 222, 0, 0.3);
+    padding: 0;
 }
 
-.instagram-swiper .swiper-pagination-bullet-active {
+.wrapper .embla__dot--selected {
     background: #fede00;
+    width: 30px;
+    border-radius: 15px;
 }
 
-.instagram-swiper .swiper-pagination-bullet-active::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: #fede00;
-    transform-origin: left center;
-    transform: scaleX(0);
-    animation: autoplay-loading 3s linear forwards;
-}
-
-@keyframes autoplay-loading {
-    0% {
-        transform: scaleX(0);
-    }
-
-    100% {
-        transform: scaleX(1);
-    }
-}
 
 /* Responsive styles */
+@media (max-width: 1200px) {
+    .embla__button--prev {
+        left: -20px;
+    }
+
+    .embla__button--next {
+        right: -20px;
+    }
+
+    .wrapper {
+        margin: 0 20px 35px;
+        width: auto;
+    }
+}
+
 @media (max-width: 768px) {
     .instagram-header {
         flex-direction: column;
@@ -176,17 +263,19 @@
     }
 
     .instagram-container {
-        padding: 0 20px;
+        padding: 0;
     }
 
     .instagram-image {
         height: 400px;
     }
 
-    /* Ensure arrows are visible on mobile like in Reviews */
-    .instagram-swiper .swiper-button-next,
-    .instagram-swiper .swiper-button-prev {
-        display: block;
+    .embla__button {
+        display: none;
+    }
+
+    .embla__slide {
+        padding-left: 10px;
     }
 }
 

@@ -69,8 +69,7 @@
     box-sizing: border-box;
 }
 
-/* Dodane style z CardSlider.css */
-.container {
+.events-section .container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,14 +78,59 @@
     background-color: #111a0b;
 }
 
-.wrapper {
-    max-width: 1100px;
+.events-section .wrapper {
+    max-width: 1200px;
+    width: 100%;
     padding: 20px 10px;
-    margin: 0 60px 35px;
-    overflow: hidden;
+    margin: 0 auto 35px;
+    overflow: visible;
+    position: relative;
 }
 
-.wrapper .card {
+/* Embla Carousel Styles */
+.events-section .embla {
+    overflow: hidden;
+    padding: 10px;
+    margin: -10px;
+}
+
+.events-section .embla__container {
+    display: flex;
+}
+
+.events-section .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+/* Responsive Slide Widths */
+@media (min-width: 768px) {
+    .events-section .embla__slide {
+        flex: 0 0 50%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .events-section .embla__slide {
+        flex: 0 0 33.333%;
+    }
+}
+
+/* Custom width for single items */
+@media (min-width: 768px) {
+    .events-section .embla__slide--single {
+        flex: 0 0 60% !important;
+    }
+}
+
+.events-section .embla__container--center {
+    justify-content: center;
+}
+
+
+.events-section .wrapper .card {
     background: #fff;
     display: flex;
     height: 500px;
@@ -96,13 +140,14 @@
     transition: transform 0.3s ease;
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 
-.wrapper .card:hover {
+.events-section .wrapper .card:hover {
     transform: translateY(-10px);
 }
 
-.card .card-image {
+.events-section .card .card-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -111,7 +156,7 @@
     z-index: 1;
 }
 
-.card .card-image img {
+.events-section .card .card-image img {
     width: 100%;
     height: 100%;
     padding: 0;
@@ -119,7 +164,7 @@
     object-fit: cover;
 }
 
-.card .card-content {
+.events-section .card .card-content {
     position: relative;
     z-index: 2;
     flex: 1;
@@ -131,7 +176,7 @@
     justify-content: flex-end;
 }
 
-.card .card-content .card-title {
+.events-section .card .card-content .card-title {
     color: #fff;
     font-size: 1.4rem;
     font-weight: 700;
@@ -140,7 +185,7 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-.card .card-content .card-date {
+.events-section .card .card-content .card-date {
     color: #fede00;
     font-size: 0.9rem;
     font-weight: 600;
@@ -148,19 +193,21 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-.card .card-footer {
+.events-section .card .card-footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
 
-.card .card-button {
+.events-section .card .card-button {
     color: #111a0b;
-    padding: 12px 24px;
+    padding: 10px 18px;
     border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     text-decoration: none;
     background: linear-gradient(135deg, #fede00 0%, #ffd700 100%);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -168,88 +215,126 @@
     border: none;
     cursor: pointer;
     text-shadow: none;
+    white-space: nowrap;
 }
 
-.card .card-button:hover {
+.events-section .card .card-button.secondary {
+    background: transparent;
+    border: 2px solid #fede00;
+    color: #fede00;
+}
+
+.events-section .card .card-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
     background: linear-gradient(135deg, #ffd700 0%, #fede00 100%);
+    color: #111a0b;
 }
 
-.wrapper .swiper-pagination-bullet {
-    height: 15px;
-    width: 15px;
-    opacity: 1;
-    overflow: hidden;
-    position: relative;
-    background: rgba(254, 222, 0, 0.3);
-    margin: 0 5px;
-}
-
-.wrapper .swiper-pagination-bullet-active {
+.events-section .card .card-button.secondary:hover {
     background: #fede00;
+    color: #111a0b;
 }
 
-.wrapper .swiper-pagination-bullet-active::before {
-    content: '';
+/* Embla Navigation Buttons */
+.events-section .embla__button {
+    outline: 0;
+    cursor: pointer;
+    background-color: transparent;
+    touch-action: manipulation;
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: #fede00;
-    transform-origin: left center;
-    transform: scaleX(0);
-    animation: autoplay-loading 5s linear forwards;
-}
-
-.container:hover .wrapper .swiper-pagination-bullet-active::before {
-    animation-play-state: paused;
-}
-
-@keyframes autoplay-loading {
-    0% {
-        transform: scaleX(0);
-    }
-
-    100% {
-        transform: scaleX(1);
-    }
-}
-
-.wrapper :where(.swiper-button-prev, .swiper-button-next) {
-    color: #fede00;
-    background: transparent;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
     width: 40px;
     height: 40px;
+    justify-content: center;
+    align-items: center;
+    fill: #fede00;
+    padding: 0;
+    color: #fede00;
     border-radius: 50%;
-    margin-top: -20px;
+    display: flex;
     transition: all 0.3s ease;
 }
 
-.wrapper :where(.swiper-button-prev, .swiper-button-next):hover {
-    color: #fede00;
+.events-section .embla__button svg {
+    width: 35px;
+    height: 35px;
 }
 
-.wrapper .swiper-button-next:after,
-.wrapper .swiper-button-prev:after {
-    font-size: 18px;
+.events-section .embla__button:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
 }
 
-.custom-swiper-pagination {
-    width: 100%;
-    position: relative;
+.events-section .embla__button--prev {
+    left: -50px;
+}
+
+.events-section .embla__button--next {
+    right: -50px;
+}
+
+/* Embla Pagination Dots */
+.events-section .embla__dots {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 25px;
+    padding-top: 20px;
 }
 
+.events-section .embla__dot {
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+}
 
+.events-section .embla__dot:after {
+    background-color: rgba(254, 222, 0, 0.3);
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    content: '';
+    transition: all 0.3s ease;
+}
+
+.events-section .embla__dot--selected:after {
+    background-color: #fede00;
+    height: 4px;
+}
+
+.events-section .wrapper .embla__dot {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background: rgba(254, 222, 0, 0.3);
+    padding: 0;
+}
+
+.events-section .wrapper .embla__dot:after {
+    display: none;
+}
+
+.events-section .wrapper .embla__dot--selected {
+    background: #fede00;
+    width: 30px;
+    border-radius: 15px;
+}
 
 /* Loading i Error states */
-.loading,
-.error {
+.events-section .loading,
+.events-section .error {
     text-align: center;
     padding: 40px 20px;
     color: #fede00;
@@ -257,127 +342,30 @@
     font-size: 1.1rem;
 }
 
-.error {
+.events-section .error {
     color: #ff6b6b;
 }
 
-/* Stare style dla kompatybilności */
-.alice-carousel {
-    position: relative;
-    width: 100%;
-}
 
-.event-card {
-    flex: 0 0 auto;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    position: relative;
-    margin: 0 1rem;
-}
-
-.event-card:hover {
-    transform: scale(1.02);
-    opacity: 0.95;
-}
-
-.event-image {
-    width: 100%;
-    height: 80%;
-    /* Większe zdjęcia */
-    overflow: hidden;
-    position: relative;
-}
-
-.event-image::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-}
-
-.event-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.event-card:hover .event-image img {
-    transform: scale(1.05);
-}
-
-.event-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem;
-    z-index: 1;
-}
-
-.event-info h3 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: white;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: 'Young Heart', sans-serif;
-}
-
-.event-info p {
-    margin: 0.5rem 0;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.1rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: 'Inter', sans-serif;
-}
-
-.event-info .events-button {
-    margin: 0.5rem 0 0;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-    position: relative;
-    z-index: 10;
-    padding: 10px;
-}
-
-/* Tablet - 2 events visible */
-@media (max-width: 1023px) and (min-width: 769px) {
-    .events-section {
-        padding: 20px 1rem 0 1rem;
+/* Media Queries */
+@media (max-width: 1200px) {
+    .events-section .embla__button--prev {
+        left: -20px;
     }
 
-    .events-header {
-        padding-left: 2rem;
-        padding-right: 2rem;
+    .events-section .embla__button--next {
+        right: -20px;
     }
 
-    .event-card {
-        width: 350px;
-        height: 450px;
-    }
-
-    .alice-carousel__prev-btn {
-        left: 10px;
-    }
-
-    .alice-carousel__next-btn {
-        right: 10px;
+    .events-section .wrapper {
+        margin: 0 20px 35px;
+        width: auto;
     }
 }
 
-/* Mobile - 1 event visible */
 @media (max-width: 768px) {
     .events-section {
-        padding: 20px 1rem 0 1rem;
+        padding: 20px 0 0 0;
     }
 
     .events-header {
@@ -385,6 +373,7 @@
         gap: 1rem;
         align-items: center;
         text-align: center;
+        padding: 0 20px;
     }
 
     .events-title {
@@ -392,27 +381,21 @@
         margin-left: 0;
     }
 
-    .events-button {
-        margin-right: 0;
-    }
-
-    .event-card {
-        width: 90%;
-        height: 400px;
-    }
-
-    .alice-carousel__prev-btn,
-    .alice-carousel__next-btn {
+    .events-section .embla__button {
         display: none;
-        /* Ukryj strzałki na mobile */
     }
 
-    .wrapper {
-        margin: 0 10px 25px;
+    .events-section .embla__slide {
+        padding-left: 10px;
+        flex: 0 0 100%;
     }
 
-    /* Show small arrows on mobile like in Reviews */
-    .wrapper :where(.swiper-button-prev, .swiper-button-next) {
-        display: block;
+    .events-section .wrapper {
+        padding: 20px 0;
+        margin: 0 0 35px;
+    }
+
+    .events-section .wrapper .card {
+        height: 450px;
     }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './VipBanner.css';
 
-function VipBanner() {
+function VipBanner({ onOpenReservation }) {
     return (
         <section
             className="vip-banner"
@@ -14,12 +15,12 @@ function VipBanner() {
                 <h1 className="vip-title">Loża VIP</h1>
                 <h2 className="vip-subtitle">Wyjątkowe Doznania</h2>
                 <p className="vip-description">
-                    Odkryj świat ekskluzywnej rozrywki w naszej luksusowej loży
+                    Odkryj world ekskluzywnej rozrywki w naszej luksusowej loży
                 </p>
-                <button className="vip-button">Zarezerwuj Lożę</button>
+                <button onClick={onOpenReservation} className="vip-button">Zarezerwuj Lożę</button>
             </div>
         </section>
     );
 }
 
-export default VipBanner; 
+export default VipBanner;

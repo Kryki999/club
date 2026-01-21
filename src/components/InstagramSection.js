@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { RiInstagramFill } from 'react-icons/ri';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import React, { useState, useEffect, useCallback } from 'react';
+import { RiInstagramFill, RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import './InstagramSection.css';
 
 function InstagramSection() {
@@ -51,6 +48,47 @@ function InstagramSection() {
             link: "https://www.instagram.com/letniastrefaostroda/"
         }
     ]);
+
+    // Embla Carousel setup
+    const isSingle = instagramPosts.length === 1;
+    const isDouble = instagramPosts.length === 2;
+    const isFew = instagramPosts.length <= 2;
+
+    const [emblaRef, emblaApi] = useEmblaCarousel({
+        loop: !isFew,
+        align: isFew ? 'center' : 'start',
+        slidesToScroll: 1,
+        breakpoints: {
+            '(min-width: 640px)': { slidesToScroll: 1 },
+            '(min-width: 768px)': { slidesToScroll: 1 },
+            '(min-width: 1024px)': { slidesToScroll: 1 }
+        }
+    }, [Autoplay({ delay: 3000, stopOnInteraction: false })]);
+
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [scrollSnaps, setScrollSnaps] = useState([]);
+
+    const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+    const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+    const scrollTo = useCallback((index) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
+
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return;
+        setSelectedIndex(emblaApi.selectedScrollSnap());
+    }, [emblaApi]);
+
+    useEffect(() => {
+        if (!emblaApi) return;
+
+        // Re-init when posts change
+        emblaApi.reInit();
+
+        onSelect();
+        setScrollSnaps(emblaApi.scrollSnapList());
+        emblaApi.on('select', onSelect);
+        emblaApi.on('reInit', onSelect);
+        emblaApi.on('reInit', () => setScrollSnaps(emblaApi.scrollSnapList()));
+    }, [emblaApi, onSelect, instagramPosts]);
 
     // Pobieranie danych z Strapi - galerias
     useEffect(() => {
@@ -102,52 +140,54 @@ function InstagramSection() {
                 </a>
             </div>
             <div className="instagram-container">
-                <Swiper
-                    modules={[Autoplay, Pagination, Navigation]}
-                    spaceBetween={20}
-                    slidesPerView={1}
-                    breakpoints={{
-                        640: {
-                            slidesPerView: 2,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 3,
-                            spaceBetween: 20,
-                        },
-                        1024: {
-                            slidesPerView: 3,
-                            spaceBetween: 20,
-                        },
-                    }}
-                    autoplay={{
-                        delay: 3000,
-                        disableOnInteraction: false,
-                    }}
-                    pagination={{
-                        clickable: true,
-                        el: '.custom-instagram-pagination',
-                    }}
-                    navigation={true}
-                    loop={true}
-                    className="instagram-swiper"
-                >
-                    {instagramPosts.map((post) => (
-                        <SwiperSlide key={post.id}>
-                            <a
-                                href={post.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="instagram-card"
-                            >
-                                <div className="instagram-image">
-                                    <img src={post.image} alt="Instagram post" />
+                <div className={`wrapper instagram-wrapper ${isFew ? 'instagram-wrapper--few' : ''}`}>
+                    <div className="embla" ref={emblaRef}>
+                        <div className={`embla__container ${isFew ? 'embla__container--center' : ''}`}>
+                            {instagramPosts.map((post) => (
+                                <div
+                                    className={`embla__slide ${isSingle ? 'embla__slide--single' : ''} ${isDouble ? 'embla__slide--double' : ''}`}
+                                    key={post.id}
+                                >
+                                    <a
+                                        href={post.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="instagram-card"
+                                    >
+                                        <div className="instagram-image">
+                                            <img src={post.image} alt="Instagram post" />
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </SwiperSlide>
-                    ))}
-                    <div className="custom-instagram-pagination"></div>
-                </Swiper>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    {instagramPosts.length > 2 && (
+                        <>
+                            <button className="embla__button embla__button--prev" onClick={scrollPrev}>
+                                <RiArrowLeftSLine />
+                            </button>
+                            <button className="embla__button embla__button--next" onClick={scrollNext}>
+                                <RiArrowRightSLine />
+                            </button>
+                        </>
+                    )}
+
+                    {/* Pagination Dots */}
+                    {instagramPosts.length > 1 && (
+                        <div className="embla__dots">
+                            {scrollSnaps.map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`embla__dot ${index === selectedIndex ? 'embla__dot--selected' : ''}`}
+                                    onClick={() => scrollTo(index)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </section>
     );

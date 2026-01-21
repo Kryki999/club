@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FiPhone } from 'react-icons/fi';
 import { RiInstagramFill } from 'react-icons/ri';
 import { AiFillFacebook, AiFillTikTok } from 'react-icons/ai';
 import './Navigation.css';
 
-function Navigation() {
+function Navigation({ onOpenReservation }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -26,13 +27,18 @@ function Navigation() {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleReservationClick = (e) => {
+        if (e) e.preventDefault();
+        setIsMenuOpen(false); // Close mobile menu if open
+        onOpenReservation();
+    };
+
     return (
         <nav className={`navigation ${isScrolled ? 'scrolled' : ''}`}>
 
             <div className="nav-brand">
-                <a href="/">Letnia Strefa</a>
+                <Link to="/">Letnia Strefa</Link>
             </div>
-
 
             <div className="nav-mobile-right">
                 <a href="https://instagram.com" className="nav-social" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -58,12 +64,17 @@ function Navigation() {
 
             <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
                 <button className="close-mobile-menu" onClick={toggleMenu} aria-label="Zamknij menu" style={{ position: 'absolute', top: 20, right: 20, background: 'none', border: 'none', fontSize: 32, color: '#fff', cursor: 'pointer', zIndex: 1002 }}>&times;</button>
-                <a href="/Wydarzenia" className="mobile-link">Wydarzenia</a>
-                <a href="/Galeria" className="mobile-link">Galeria</a>
-                <a href="/Rezerwacja" className="mobile-link">Rezerwacja Loży</a>
-                <a href="/Kontakt" className="mobile-link">Kontakt</a>
-                <a href="/Opinie" className="mobile-link">Opinie</a>
-                <a href="/Dojazd" className="mobile-link">Dojazd</a>
+                <Link to="/" className="mobile-link" onClick={toggleMenu}>Home</Link>
+                <a href="/#wydarzenia" className="mobile-link" onClick={toggleMenu}>Wydarzenia</a>
+                <a
+                    href="#rezerwacja"
+                    className="mobile-link"
+                    onClick={handleReservationClick}
+                >
+                    Rezerwacja Loży
+                </a>
+                <a href="/#galeria" className="mobile-link" onClick={toggleMenu}>Galeria</a>
+                <a href="/#kontakt" className="mobile-link" onClick={toggleMenu}>Kontakt</a>
             </div>
         </nav>
     );

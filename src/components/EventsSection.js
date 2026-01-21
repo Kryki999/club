@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { RiFacebookFill } from 'react-icons/ri';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import React, { useState, useEffect, useCallback } from 'react';
+import { RiFacebookFill, RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import './EventsSection.css';
 import tymekImg from '../assets/tymek.jpg';
 import mrpolskaImg from '../assets/mrpolska2.jpg';
 import defaultimg from '../assets/letnia2.jpg';
+
 function EventsSection() {
   const [events, setEvents] = useState([
     {
@@ -35,9 +34,53 @@ function EventsSection() {
       date: '17.05.2025',
       image: mrpolskaImg,
     },
-
-
   ]);
+
+  // Embla Carousel setup
+  const isSingle = events.length === 1;
+  const isDouble = events.length === 2;
+  const isFew = events.length <= 2;
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: !isFew,
+    align: isFew ? 'center' : 'start',
+    slidesToScroll: 1,
+    breakpoints: {
+      '(min-width: 768px)': { slidesToScroll: 1 },
+      '(min-width: 1024px)': { slidesToScroll: 1 }
+    }
+  }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
+
+  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
+  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState([]);
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setPrevBtnEnabled(emblaApi.canScrollPrev());
+    setNextBtnEnabled(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    // Re-init when events change/resize
+    emblaApi.reInit();
+
+    onSelect();
+    setScrollSnaps(emblaApi.scrollSnapList());
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+
+    emblaApi.on('reInit', () => setScrollSnaps(emblaApi.scrollSnapList()));
+
+  }, [emblaApi, onSelect, events]);
 
   // Pobieranie danych z Strapi
   useEffect(() => {
@@ -99,46 +142,62 @@ function EventsSection() {
       </div>
       <div className="events-container">
         <div className="container">
-          <div className="wrapper">
-            <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
-              loop={events.length >= 4} // Loop tylko gdy jest 4+ wydarzeń
-              spaceBetween={30}
-              autoplay={events.length >= 4 ? {
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              } : false} // Autoplay tylko gdy jest 4+ wydarzeń
-              pagination={{
-                el: ".custom-swiper-pagination",
-                clickable: true,
-                dynamicBullets: true,
-              }}
-              navigation={events.length > 1} // Navigation tylko gdy jest więcej niż 1 wydarzenie
-              breakpoints={{
-                0: { slidesPerView: 1 },
-                768: { slidesPerView: Math.min(2, events.length) },
-                1024: { slidesPerView: Math.min(3, events.length) },
-              }}
-            >
-              {events.map((event) => (
-                <SwiperSlide key={event.id}>
-                  <div className="card">
-                    <div className="card-image">
-                      <img src={event.image} alt={event.title} />
-                    </div>
-                    <div className="card-content">
-                      <h3 className="card-title">{event.title}</h3>
-                      <p className="card-date">{event.date}</p>
-                      <div className="card-footer">
-                        <button className="card-button">Kup bilet</button>
+          <div className={`wrapper embla-wrapper ${isFew ? 'embla-wrapper--few' : ''}`}>
+            <div className="embla" ref={emblaRef}>
+              <div className={`embla__container ${isFew ? 'embla__container--center' : ''}`}>
+                {events.map((event) => (
+                  <div
+                    className={`embla__slide ${isSingle ? 'embla__slide--single' : ''} ${isDouble ? 'embla__slide--double' : ''}`}
+                    key={event.id}
+                  >
+                    <div className="card">
+                      <div className="card-image">
+                        <img src={event.image} alt={event.title} />
+                      </div>
+                      <div className="card-content">
+                        <h3 className="card-title">{event.title}</h3>
+                        <p className="card-date">{event.date}</p>
+                        <div className="card-footer">
+                          <button className="card-button">Kup bilet</button>
+                          <Link
+                            to={`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.title)}`}
+                            className="card-button secondary"
+                          >
+                            Rezerwacja loży
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </SwiperSlide>
-              ))}
-              <div className="custom-swiper-pagination"></div>
-            </Swiper>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            {events.length > 2 && (
+              <>
+                <button className="embla__button embla__button--prev" onClick={scrollPrev}>
+                  <RiArrowLeftSLine />
+                </button>
+                <button className="embla__button embla__button--next" onClick={scrollNext}>
+                  <RiArrowRightSLine />
+                </button>
+              </>
+            )}
+
+            {/* Pagination Dots */}
+            {events.length > 1 && (
+              <div className="embla__dots">
+                {scrollSnaps.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`embla__dot ${index === selectedIndex ? 'embla__dot--selected' : ''}`}
+                    onClick={() => scrollTo(index)}
+                  />
+                ))}
+              </div>
+            )}
+
           </div>
         </div>
       </div>
