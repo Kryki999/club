@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ClubMap from '../components/ClubMap';
 import EventInfoCard from '../components/EventInfoCard';
@@ -7,7 +7,7 @@ import './ReservationPage.css';
 function ReservationPage({ onOpenReservation, onOpenCheckout }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const queryParams = new URLSearchParams(location.search);
+    const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
     const initialEventId = queryParams.get('eventId');
     const initialEventName = queryParams.get('eventName');
     const initialEventDate = queryParams.get('eventDate');
@@ -50,7 +50,7 @@ function ReservationPage({ onOpenReservation, onOpenCheckout }) {
             // Optional: Redirect to home or show error if no event selected
             // navigate('/');
         }
-    }, [location.search]);
+    }, [queryParams]);
 
     if (!selectedEvent) {
         return (

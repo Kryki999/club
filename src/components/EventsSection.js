@@ -4,16 +4,12 @@ import { Link } from 'react-router-dom';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import './EventsSection.css';
-import tymekImg from '../assets/tymek.jpg';
-import mrpolskaImg from '../assets/mrpolska2.jpg';
-import defaultimg from '../assets/letnia2.jpg';
 
 import TicketPurchaseModal from './TicketPurchaseModal';
 
 function EventsSection({ onOpenCheckout }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -49,8 +45,6 @@ function EventsSection({ onOpenCheckout }) {
     dragFree: false
   }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
 
-  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
-  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState([]);
 
@@ -61,8 +55,6 @@ function EventsSection({ onOpenCheckout }) {
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-    setPrevBtnEnabled(emblaApi.canScrollPrev());
-    setNextBtnEnabled(emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -201,8 +193,8 @@ function EventsSection({ onOpenCheckout }) {
     );
   }
 
-  // Error or empty state
-  if (error || events.length === 0) {
+  // Empty state
+  if (events.length === 0) {
     return (
       <section className="events-section">
         <div className="events-header">
@@ -216,12 +208,10 @@ function EventsSection({ onOpenCheckout }) {
           <div className="empty-state">
             <div className="empty-state-icon">🎶</div>
             <h3 className="empty-state-title">
-              {error ? 'Ups! Coś poszło nie tak' : 'Brak zaplanowanych wydarzeń'}
+              Brak zaplanowanych wydarzeń
             </h3>
             <p className="empty-state-text">
-              {error
-                ? 'Nie udało się załadować wydarzeń. Spróbuj odświeżyć stronę.'
-                : 'Aktualnie nie ma zaplanowanych wydarzeń. Zajrzyj tu wkrótce!'}
+              Aktualnie nie ma zaplanowanych wydarzeń. Zajrzyj tu wkrótce!
             </p>
           </div>
         </div>

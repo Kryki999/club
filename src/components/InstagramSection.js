@@ -4,41 +4,41 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import './InstagramSection.css';
 
+// TESTOWE DANE - lokalne zdjęcia z folderu public
+const instagramPosts = [
+    {
+        id: 1,
+        image: "/letnia1.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    },
+    {
+        id: 2,
+        image: "/letnia3.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    },
+    {
+        id: 3,
+        image: "/letnia5.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    },
+    {
+        id: 4,
+        image: "/vipbanner.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    },
+    {
+        id: 5,
+        image: "/mrpolska.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    },
+    {
+        id: 6,
+        image: "/dniostrodyjpg.jpg",
+        link: "https://www.instagram.com/letniastrefaostroda/"
+    }
+];
 
 function InstagramSection() {
-    // TESTOWE DANE - lokalne zdjęcia z folderu public
-    const [instagramPosts, setInstagramPosts] = useState([
-        {
-            id: 1,
-            image: "/letnia1.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        },
-        {
-            id: 2,
-            image: "/letnia3.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        },
-        {
-            id: 3,
-            image: "/letnia5.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        },
-        {
-            id: 4,
-            image: "/vipbanner.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        },
-        {
-            id: 5,
-            image: "/mrpolska.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        },
-        {
-            id: 6,
-            image: "/dniostrodyjpg.jpg",
-            link: "https://www.instagram.com/letniastrefaostroda/"
-        }
-    ]);
 
     // Oryginalny kod ze Strapi (zakomentowany)
     /*
@@ -125,7 +125,7 @@ function InstagramSection() {
         emblaApi.on('select', onSelect);
         emblaApi.on('reInit', onSelect);
         emblaApi.on('reInit', () => setScrollSnaps(emblaApi.scrollSnapList()));
-    }, [emblaApi, onSelect, instagramPosts]);
+    }, [emblaApi, onSelect]);
 
     // Oryginalny kod fetch ze Strapi (zakomentowany)
     /*

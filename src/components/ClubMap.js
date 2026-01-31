@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BookingModal from './BookingModal';
 
 const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) => {
@@ -63,9 +63,7 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
             try {
                 const apiUrl = process.env.REACT_APP_STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
                 // Poprawione zapytanie do /api/wydarzenias
-                const response = await fetch(`${apiUrl}/api/wydarzenias/${eventId}`);
-                const data = await response.json();
-
+                await fetch(`${apiUrl}/api/wydarzenias/${eventId}`);
                 // Event name is now passed as prop, no need to fetch or set it
             } catch (error) {
                 console.error("Error fetching event name:", error);
@@ -75,18 +73,7 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
         fetchEventName();
     }, [eventId]);
 
-    // Fetch Reservations when eventId changes
-    useEffect(() => {
-        if (!eventId) {
-            setConfirmedTableIds([]);
-            setPendingTableIds([]);
-            return;
-        }
-
-        fetchReservations();
-    }, [eventId]);
-
-    const fetchReservations = async () => {
+    const fetchReservations = useCallback(async () => {
         setConfirmedTableIds([]);
         setPendingTableIds([]);
 
@@ -120,7 +107,18 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
         } catch (error) {
             console.error("❌ Błąd pobierania rezerwacji:", error);
         }
-    };
+    }, [eventId]);
+
+    // Fetch Reservations when eventId changes
+    useEffect(() => {
+        if (!eventId) {
+            setConfirmedTableIds([]);
+            setPendingTableIds([]);
+            return;
+        }
+
+        fetchReservations();
+    }, [eventId, fetchReservations]);
 
     const handleMouseEnter = (e, table) => {
         setTooltip({

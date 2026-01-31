@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './VipBanner.css';
 
 function VipBanner({ onOpenReservation }) {

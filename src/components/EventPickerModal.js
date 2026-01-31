@@ -7,7 +7,6 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedEventId, setSelectedEventId] = useState(null);
     const [alertMessage, setAlertMessage] = useState(null);
 
     useEffect(() => {
@@ -73,8 +72,6 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
     const normalizeEventId = (id) => id ? String(id) : null;
 
     const handleEventClick = (event) => {
-        setSelectedEventId(event.id);
-
         console.log('🔍 EventPickerModal - handleEventClick:', {
             eventId: event.id,
             eventName: event.name,

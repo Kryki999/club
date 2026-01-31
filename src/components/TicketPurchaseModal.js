@@ -95,12 +95,12 @@ const TicketPurchaseModal = ({ isOpen, onClose, eventName, eventId, eventDate, e
             quantity,
             unitPrice: ticketPrice,
             totalAmount: totalPrice
-        }, eventName);
+        }, eventName, eventImage, eventDate);
 
         if (result.success) {
             onClose();
             // Redirect to reservation page with map
-            navigate(`/reservation?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
+            navigate(`/reservation?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}&eventDate=${encodeURIComponent(eventDate || '')}&eventImage=${encodeURIComponent(eventImage || '')}`);
         } else {
             setError(result.error);
         }
