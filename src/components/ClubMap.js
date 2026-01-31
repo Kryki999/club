@@ -158,6 +158,7 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
         }
     };
 
+
     const handleModalClose = () => {
         setIsModalOpen(false);
         setSelectedTable(null);
@@ -322,3 +323,4 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
 };
 
 export default ClubMap;
+
