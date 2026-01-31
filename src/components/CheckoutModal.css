@@ -299,11 +299,27 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .checkout-modal-overlay {
+        z-index: 10000;
+    }
+
     .checkout-modal-content {
-        padding: 25px;
+        padding: 20px;
+        width: 95%;
+        max-height: 92vh;
     }
 
     .checkout-modal-title {
-        font-size: 22px;
+        font-size: 20px;
+    }
+
+    .checkout-btn-pay {
+        font-size: 15px;
+        padding: 14px;
+    }
+
+    .checkout-btn-cancel {
+        font-size: 13px;
+        padding: 12px;
     }
 }

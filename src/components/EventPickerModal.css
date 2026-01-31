@@ -202,3 +202,33 @@
 .event-picker-content::-webkit-scrollbar-thumb:hover {
     background: #ffd700;
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .event-picker-overlay {
+        z-index: 10000;
+    }
+
+    .event-picker-content {
+        width: 95%;
+        padding: 20px;
+        max-height: 90vh;
+    }
+
+    .event-picker-title {
+        font-size: 20px;
+    }
+
+    .event-item {
+        padding: 12px;
+    }
+
+    .event-item-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .event-item-name {
+        font-size: 15px;
+    }
+}

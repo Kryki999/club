@@ -14,6 +14,22 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
 
 
 
+    // Mock tables data for testing when Strapi is unavailable
+    const mockTables = [
+        // Górny rząd - 5 lóż
+        { id: 1, name: 'Loża 1', x: 140, y: 45, width: 40, height: 40, minSpend: 500, zone: { color: '#fede00' } },
+        { id: 2, name: 'Loża 2', x: 210, y: 45, width: 40, height: 40, minSpend: 500, zone: { color: '#fede00' } },
+        { id: 3, name: 'Loża 3', x: 280, y: 45, width: 40, height: 40, minSpend: 600, zone: { color: '#fede00' } },
+        { id: 4, name: 'Loża 4', x: 350, y: 45, width: 40, height: 40, minSpend: 600, zone: { color: '#fede00' } },
+        { id: 5, name: 'Loża VIP 1', x: 420, y: 45, width: 40, height: 40, minSpend: 1000, zone: { color: '#ff6b6b' } },
+        // Dolny rząd - 5 lóż
+        { id: 6, name: 'Loża 5', x: 140, y: 315, width: 40, height: 40, minSpend: 500, zone: { color: '#fede00' } },
+        { id: 7, name: 'Loża 6', x: 210, y: 315, width: 40, height: 40, minSpend: 500, zone: { color: '#fede00' } },
+        { id: 8, name: 'Loża 7', x: 280, y: 315, width: 40, height: 40, minSpend: 600, zone: { color: '#fede00' } },
+        { id: 9, name: 'Loża 8', x: 350, y: 315, width: 40, height: 40, minSpend: 600, zone: { color: '#fede00' } },
+        { id: 10, name: 'Loża VIP 2', x: 420, y: 315, width: 40, height: 40, minSpend: 1000, zone: { color: '#ff6b6b' } },
+    ];
+
     // Fetch Tables
     useEffect(() => {
         const fetchTables = async () => {
@@ -25,7 +41,7 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
 
 
 
-                if (data.data) {
+                if (data.data && data.data.length > 0) {
                     const formattedTables = data.data.map(t => {
                         const props = t.attributes || t;
                         let zoneData = null;
@@ -44,9 +60,16 @@ const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) 
                         };
                     });
                     setTables(formattedTables);
+                } else {
+                    // Use mock data if no tables from API
+                    console.log('📋 Using mock tables data');
+                    setTables(mockTables);
                 }
             } catch (error) {
                 console.error("Error fetching tables:", error);
+                // Use mock data on error
+                console.log('📋 Using mock tables data (API error)');
+                setTables(mockTables);
             } finally {
                 setLoading(false);
             }
