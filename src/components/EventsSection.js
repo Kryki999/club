@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { RiFacebookFill, RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
 import './EventsSection.css';
 
 import TicketPurchaseModal from './TicketPurchaseModal';
@@ -43,7 +42,7 @@ function EventsSection({ onOpenCheckout }) {
     slidesToScroll: 1,
     containScroll: 'trimSnaps',
     dragFree: false
-  }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
+  });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState([]);
