@@ -32,6 +32,13 @@ function ReservationPage({ onOpenReservation, onOpenCheckout }) {
         const eventDate = queryParams.get('eventDate');
         const eventImage = queryParams.get('eventImage');
 
+        console.log('🔍 ReservationPage - URL params:', {
+            eventId,
+            eventName,
+            eventDate,
+            eventImage
+        });
+
         if (eventId) {
             setSelectedEvent({
                 id: eventId,

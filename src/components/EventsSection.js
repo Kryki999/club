@@ -80,7 +80,45 @@ function EventsSection({ onOpenCheckout }) {
 
   }, [emblaApi, onSelect, events, isMobile, isFew, carouselAlign]);
 
-  // Fetch events from Strapi
+  // TESTOWE DANE - bez podłączania Strapi
+  useEffect(() => {
+    // Mock data dla demo - 2 wydarzenia
+    const mockEvents = [
+      {
+        id: 1,
+        title: '🎶 OSTRÓDA FOLK FESTIVAL – Górale na Mazurach! 🎶',
+        rawDate: '2026-05-17T20:00:00Z',
+        date: new Date('2026-05-17T20:00:00Z').toLocaleDateString('pl-PL', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+        image: '/folk.png',
+      },
+      {
+        id: 2,
+        title: 'Summer Vibes',
+        rawDate: '2026-06-22T21:00:00Z',
+        date: new Date('2026-06-22T21:00:00Z').toLocaleDateString('pl-PL', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+        image: '/letnia5.jpg',
+      },
+    ];
+
+    setLoading(true);
+    // Symulacja opóźnienia
+    setTimeout(() => {
+      console.log('📅 EventsSection - Mock events loaded:', mockEvents);
+      setEvents(mockEvents);
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  // Oryginalny kod fetch ze Strapi (zakomentowany)
+  /*
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
@@ -138,6 +176,7 @@ function EventsSection({ onOpenCheckout }) {
 
     fetchEvents();
   }, []);
+  */
 
   const handleOpenModal = (event) => {
     setSelectedEvent(event);

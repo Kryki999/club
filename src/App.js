@@ -20,7 +20,8 @@ function AppContent() {
 
   const handleSelectEvent = (event) => {
     setIsEventPickerOpen(false);
-    navigate(`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.name)}&eventDate=${encodeURIComponent(event.date || '')}&eventImage=${encodeURIComponent(event.image ? `${process.env.REACT_APP_STRAPI_API_URL || 'http://localhost:1337'}${event.image}` : '')}`);
+    // Dla testowych danych używamy bezpośrednio event.image (bez dodawania Strapi URL)
+    navigate(`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.name)}&eventDate=${encodeURIComponent(event.date || '')}&eventImage=${encodeURIComponent(event.image || '')}`);
   };
 
   const handleOpenCheckout = () => {

@@ -16,6 +16,39 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
         }
     }, [isOpen]);
 
+    // TESTOWE DANE - bez podłączania Strapi
+    const fetchEvents = async () => {
+        setLoading(true);
+        try {
+            // Mock data dla demo - 2 wydarzenia
+            const mockEvents = [
+                {
+                    id: 1,
+                    name: 'OSTRÓDA FOLK FESTIVAL – Górale na Mazurach!',
+                    date: '2026-05-17T20:00:00Z',
+                    image: '/folk.png'
+                },
+                {
+                    id: 2,
+                    name: 'Summer Vibes',
+                    date: '2026-06-22T21:00:00Z',
+                    image: '/letnia5.jpg'
+                }
+            ];
+
+            // Symulacja opóźnienia
+            await new Promise(resolve => setTimeout(resolve, 500));
+            setEvents(mockEvents);
+        } catch (err) {
+            console.error('❌ Błąd pobierania wydarzeń:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Oryginalny kod fetch ze Strapi (zakomentowany)
+    /*
     const fetchEvents = async () => {
         setLoading(true);
         try {
@@ -35,6 +68,7 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
             setLoading(false);
         }
     };
+    */
 
     const normalizeEventId = (id) => id ? String(id) : null;
 
@@ -132,7 +166,7 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
                                 >
                                     {event.image && (
                                         <img
-                                            src={`${process.env.REACT_APP_STRAPI_API_URL || 'http://localhost:1337'}${event.image}`}
+                                            src={event.image}
                                             alt={event.name}
                                             className="event-item-image"
                                         />

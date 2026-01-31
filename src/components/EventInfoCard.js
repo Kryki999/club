@@ -3,6 +3,8 @@ import { MdLocationOn } from 'react-icons/md';
 import './EventInfoCard.css';
 
 const EventInfoCard = ({ eventName, eventDate, eventImage }) => {
+    console.log('🖼️ EventInfoCard - received:', { eventName, eventDate, eventImage });
+
     return (
         <div className="event-info-card">
             <div className="event-info-image">

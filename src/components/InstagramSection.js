@@ -4,8 +4,44 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import './InstagramSection.css';
 
+
 function InstagramSection() {
-    // Zdjęcia z Instagrama @letniastrefaostroda
+    // TESTOWE DANE - lokalne zdjęcia z folderu public
+    const [instagramPosts, setInstagramPosts] = useState([
+        {
+            id: 1,
+            image: "/letnia1.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        },
+        {
+            id: 2,
+            image: "/letnia3.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        },
+        {
+            id: 3,
+            image: "/letnia5.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        },
+        {
+            id: 4,
+            image: "/vipbanner.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        },
+        {
+            id: 5,
+            image: "/mrpolska.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        },
+        {
+            id: 6,
+            image: "/dniostrodyjpg.jpg",
+            link: "https://www.instagram.com/letniastrefaostroda/"
+        }
+    ]);
+
+    // Oryginalny kod ze Strapi (zakomentowany)
+    /*
     const [instagramPosts, setInstagramPosts] = useState([
         {
             id: 1,
@@ -48,6 +84,7 @@ function InstagramSection() {
             link: "https://www.instagram.com/letniastrefaostroda/"
         }
     ]);
+    */
 
     // Embla Carousel setup
     const isSingle = instagramPosts.length === 1;
@@ -90,6 +127,8 @@ function InstagramSection() {
         emblaApi.on('reInit', () => setScrollSnaps(emblaApi.scrollSnapList()));
     }, [emblaApi, onSelect, instagramPosts]);
 
+    // Oryginalny kod fetch ze Strapi (zakomentowany)
+    /*
     // Pobieranie danych z Strapi - galerias
     useEffect(() => {
         const fetchInstagramPosts = async () => {
@@ -124,6 +163,7 @@ function InstagramSection() {
 
         fetchInstagramPosts();
     }, []);
+    */
 
     return (
         <section className="instagram-section">
