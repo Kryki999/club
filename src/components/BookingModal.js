@@ -1,109 +1,148 @@
 import React, { useState } from 'react';
+import { useCart } from '../context/CartContext';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useKeyPress } from '../hooks/useKeyPress';
+import EventInfoCard from './EventInfoCard';
 import './BookingModal.css';
 
-const BookingModal = ({ isOpen, onClose, table, eventId, eventName }) => {
-    const [customerName, setCustomerName] = useState('');
-    const [customerEmail, setCustomerEmail] = useState('');
+// Helper to normalize eventId for comparison
+const normalizeEventId = (id) => id ? String(id) : null;
+
+const BookingModal = ({ isOpen, onClose, table, eventId, eventName, eventDate, eventImage, ticketPrice = 50, onOpenCheckout }) => {
+    const { addReservation, addTicket, cart } = useCart();
+
+    // Check if user already has tickets for this event in cart
+    const existingTickets = cart.ticket &&
+        normalizeEventId(cart.eventId) === normalizeEventId(eventId)
+        ? cart.ticket
+        : null;
+
+    const [ticketQuantity, setTicketQuantity] = useState(existingTickets ? existingTickets.quantity : 0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Sync ticketQuantity with cart changes
+    React.useEffect(() => {
+        if (isOpen) {
+            const currentTickets = cart.ticket &&
+                normalizeEventId(cart.eventId) === normalizeEventId(eventId)
+                ? cart.ticket
+                : null;
+            setTicketQuantity(currentTickets ? currentTickets.quantity : 0);
+        }
+    }, [isOpen, cart, eventId]);
+
+    // Lock body scroll when modal is open
+    useBodyScrollLock(isOpen);
+
+    // Close modal on ESC key
+    useKeyPress('Escape', onClose, isOpen);
+
     if (!isOpen || !table) return null;
 
-    const isFormValid = customerName.trim() !== "" && customerEmail.trim() !== "" && customerEmail.includes('@');
+    const ticketTotal = ticketQuantity * ticketPrice;
+    const loungeMinSpend = parseFloat(table.minSpend || 0);
+    const grandTotal = ticketTotal + loungeMinSpend;
+
+    const handleTicketIncrease = () => {
+        setTicketQuantity(prev => prev + 1);
+    };
+
+    const handleTicketDecrease = () => {
+        if (ticketQuantity > 0) {
+            setTicketQuantity(prev => prev - 1);
+        }
+    };
 
     const handleBooking = async () => {
-        if (!isFormValid) {
-            setError('Wszystkie pola są wymagane i email musi być poprawny.');
-            return;
-        }
-
         setIsLoading(true);
         setError(null);
 
         try {
-            const apiUrl = process.env.REACT_APP_STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+            // Add lounge reservation
+            const reservationResult = addReservation(eventId, {
+                tableId: table.id,
+                tableName: table.name,
+                minSpend: loungeMinSpend
+            }, eventName, eventImage, eventDate);
 
-            // Krok 1: Utwórz rezerwację ze statusem draft
-            console.log('📝 Tworzenie wstępnej rezerwacji...', {
-                table: table.id,
-                wydarzenia: eventId,
-                customerName,
-                customerEmail
-            });
+            if (!reservationResult.success) {
+                setError(reservationResult.error);
+                setIsLoading(false);
+                return;
+            }
 
-            const reservationResponse = await fetch(`${apiUrl}/api/reservations`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    data: {
-                        table: table.id,
-                        wydarzenia: eventId,
-                        reservationStatus: 'draft',
-                        customerName: customerName,
-                        customerEmail: customerEmail
-                    }
-                })
-            });
+            // Only add/update tickets if quantity changed from existing or no existing tickets
+            if (ticketQuantity > 0 && (!existingTickets || ticketQuantity !== existingTickets.quantity)) {
+                const ticketResult = addTicket(eventId, {
+                    ticketTypeId: 'standard',
+                    name: `Bilet standard - ${eventName}`,
+                    quantity: ticketQuantity,
+                    unitPrice: ticketPrice,
+                    totalAmount: ticketTotal
+                }, eventName);
 
-            console.log('📤 Request sent to:', `${apiUrl}/api/reservations`);
-
-            if (!reservationResponse.ok) {
-                const errorText = await reservationResponse.text();
-                console.error('❌ Response status:', reservationResponse.status);
-                console.error('❌ Response body:', errorText);
-
-                let errorMessage = 'Nie udało się utworzyć rezerwacji';
-                try {
-                    const errorJson = JSON.parse(errorText);
-                    errorMessage = errorJson.error?.message || errorJson.message || errorMessage;
-                } catch (e) {
-                    // Text response, not JSON
+                if (!ticketResult.success) {
+                    setError(ticketResult.error);
+                    setIsLoading(false);
+                    return;
                 }
-
-                throw new Error(errorMessage);
             }
 
-            const reservationData = await reservationResponse.json();
-            const reservationId = reservationData.data?.id || reservationData.id;
-
-            console.log('✅ Wstępna rezerwacja utworzona:', reservationId);
-
-            // Krok 2: Utwórz sesję Stripe checkout
-            console.log('💳 Tworzenie sesji płatności Stripe...');
-
-            const checkoutResponse = await fetch(`${apiUrl}/api/stripe/create-checkout-session`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    reservationId: reservationId,
-                    amount: table.minSpend,
-                    currency: 'pln'
-                })
-            });
-
-            if (!checkoutResponse.ok) {
-                const errorData = await checkoutResponse.json();
-                throw new Error(errorData.error || 'Nie udało się utworzyć sesji płatności');
-            }
-
-            const { url } = await checkoutResponse.json();
-
-            console.log('✅ Sesja płatności utworzona, przekierowanie...');
-
-            // Pokaż info przed przekierowaniem
-            setError(null);
-            alert('Przekierowujemy do płatności Stripe...');
-
-            // Przekieruj do Stripe checkout
-            window.location.href = url;
+            onClose();
 
         } catch (err) {
             console.error('❌ Błąd rezerwacji:', err);
             setError(err.message || 'Wystąpił błąd podczas rezerwacji');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleCheckoutDirect = async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // Add lounge reservation
+            const reservationResult = addReservation(eventId, {
+                tableId: table.id,
+                tableName: table.name,
+                minSpend: loungeMinSpend
+            }, eventName, eventImage, eventDate);
+
+            if (!reservationResult.success) {
+                setError(reservationResult.error);
+                setIsLoading(false);
+                return;
+            }
+
+            // Add tickets if any selected
+            if (ticketQuantity > 0 && (!existingTickets || ticketQuantity !== existingTickets.quantity)) {
+                const ticketResult = addTicket(eventId, {
+                    ticketTypeId: 'standard',
+                    name: `Bilet standard - ${eventName}`,
+                    quantity: ticketQuantity,
+                    unitPrice: ticketPrice,
+                    totalAmount: ticketTotal
+                }, eventName);
+
+                if (!ticketResult.success) {
+                    setError(ticketResult.error);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
+            onClose();
+            // Open checkout modal
+            if (onOpenCheckout) {
+                onOpenCheckout();
+            }
+
+        } catch (err) {
+            console.error('❌ Błąd:', err);
+            setError(err.message || 'Wystąpił błąd');
             setIsLoading(false);
         }
     };
@@ -117,14 +156,21 @@ const BookingModal = ({ isOpen, onClose, table, eventId, eventName }) => {
 
                 <h2 className="booking-modal-title">Rezerwacja Stolika</h2>
 
+                {/* Event Info Card */}
+                <EventInfoCard
+                    eventName={eventName || `Wydarzenie #${eventId}`}
+                    eventDate={eventDate ? new Date(eventDate).toLocaleDateString('pl-PL', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    }) : ''}
+                    eventImage={eventImage}
+                />
+
                 <div className="booking-modal-info">
                     <div className="booking-info-row">
                         <span className="booking-info-label">Stolik:</span>
                         <span className="booking-info-value">{table.name}</span>
-                    </div>
-                    <div className="booking-info-row">
-                        <span className="booking-info-label">Wydarzenie:</span>
-                        <span className="booking-info-value">{eventName || `Event #${eventId}`}</span>
                     </div>
                     <div className="booking-info-row">
                         <span className="booking-info-label">Minimalna kwota:</span>
@@ -132,60 +178,112 @@ const BookingModal = ({ isOpen, onClose, table, eventId, eventName }) => {
                     </div>
                 </div>
 
-                <div className="booking-modal-form">
-                    <div className="booking-form-group">
-                        <label htmlFor="customerName">Imię i nazwisko *</label>
-                        <input
-                            type="text"
-                            id="customerName"
-                            value={customerName}
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            placeholder="Jan Kowalski"
-                            disabled={isLoading}
-                            required
-                        />
+                {/* CART SYNC BANNER - Show if user has tickets in cart */}
+                {existingTickets && (
+                    <div className="cart-sync-banner">
+                        <div className="banner-icon">✓</div>
+                        <div className="banner-text">
+                            Masz już <strong>{existingTickets.quantity} biletów</strong> w koszyku dla tego wydarzenia
+                            <div className="banner-price">+{existingTickets.totalAmount} PLN</div>
+                        </div>
+                    </div>
+                )}
+
+                {/* WARNING: Lounge doesn't include tickets */}
+                <div className="booking-warning">
+                    <div className="warning-icon">⚠️</div>
+                    <div className="warning-text">
+                        <strong>Uwaga:</strong> Loża nie zawiera biletów wstępu. Dodaj bilety poniżej aby uzyskać dostęp do wydarzenia.
+                    </div>
+                </div>
+
+                {/* TICKET SELECTION SECTION */}
+                <div className="booking-ticket-section">
+                    <div className="ticket-section-header">
+                        <span className="ticket-icon">🎫</span>
+                        <h3>Dodaj bilety wstępu</h3>
                     </div>
 
-                    <div className="booking-form-group">
-                        <label htmlFor="customerEmail">Email *</label>
-                        <input
-                            type="email"
-                            id="customerEmail"
-                            value={customerEmail}
-                            onChange={(e) => setCustomerEmail(e.target.value)}
-                            placeholder="jan@example.com"
-                            disabled={isLoading}
-                            required
-                        />
+                    <div className="ticket-counter">
+                        <span className="ticket-counter-label">Liczba biletów:</span>
+                        <div className="ticket-counter-controls">
+                            <button
+                                className="ticket-counter-btn"
+                                onClick={handleTicketDecrease}
+                                disabled={ticketQuantity === 0}
+                            >
+                                -
+                            </button>
+                            <span className="ticket-counter-value">{ticketQuantity}</span>
+                            <button
+                                className="ticket-counter-btn"
+                                onClick={handleTicketIncrease}
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
-                    {!isFormValid && customerName && customerEmail && (
-                        <p style={{ color: 'red', fontSize: '12px', marginTop: '-10px', marginBottom: '10px' }}>
-                            Wszystkie pola są wymagane i podaj poprawny email.
-                        </p>
+
+                    {ticketQuantity > 0 && (
+                        <div className="ticket-price-info">
+                            <span>Bilety:</span>
+                            <span>{ticketTotal} PLN</span>
+                        </div>
                     )}
+
+                    <div className="booking-total">
+                        <div className="booking-total-row">
+                            <span>Loża (min. spend):</span>
+                            <span>{loungeMinSpend} PLN</span>
+                        </div>
+                        {ticketQuantity > 0 && (
+                            <div className="booking-total-row">
+                                <span>Bilety ({ticketQuantity}x):</span>
+                                <span>{ticketTotal} PLN</span>
+                            </div>
+                        )}
+                        <div className="booking-total-row grand-total">
+                            <span>Razem:</span>
+                            <span>{grandTotal} PLN</span>
+                        </div>
+                    </div>
                 </div>
 
                 {error && (
-                    <div className="booking-modal-error">
-                        {error}
+                    <div className="modal-error-banner">
+                        <div className="error-icon">⚠️</div>
+                        <div className="error-text">{error}</div>
+                        <button className="error-close" onClick={() => setError(null)}>×</button>
                     </div>
                 )}
 
                 <div className="booking-modal-actions">
+                    {/*  Primary CTA - Checkout */}
                     <button
-                        className="booking-btn booking-btn-cancel"
-                        onClick={onClose}
+                        className="booking-btn booking-btn-checkout"
+                        onClick={handleCheckoutDirect}
                         disabled={isLoading}
                     >
-                        Anuluj
+                        💳 Przejdź do płatności
                     </button>
-                    <button
-                        className={`booking-btn booking-btn-confirm ${!isFormValid ? 'btn-disabled' : ''}`}
-                        onClick={handleBooking}
-                        disabled={!isFormValid || isLoading}
-                    >
-                        {isLoading ? 'Przekierowuję...' : 'Przejdź do płatności'}
-                    </button>
+
+                    {/* Secondary Actions */}
+                    <div className="booking-secondary-actions">
+                        <button
+                            className="booking-btn booking-btn-cancel"
+                            onClick={onClose}
+                            disabled={isLoading}
+                        >
+                            Anuluj
+                        </button>
+                        <button
+                            className="booking-btn booking-btn-confirm"
+                            onClick={handleBooking}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Dodawanie...' : 'Dodaj do koszyka'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

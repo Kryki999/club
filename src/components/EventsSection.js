@@ -8,47 +8,45 @@ import tymekImg from '../assets/tymek.jpg';
 import mrpolskaImg from '../assets/mrpolska2.jpg';
 import defaultimg from '../assets/letnia2.jpg';
 
-function EventsSection() {
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: 'Mocny Piątek',
-      date: '10.05.2025',
-      image: tymekImg,
-    },
-    {
-      id: 2,
-      title: 'Sobotni Melanż',
-      date: '11.05.2025',
-      image: mrpolskaImg,
-    },
-    {
-      id: 3,
-      title: 'Impreza Otwarcia',
-      date: '17.05.2025',
-      image: defaultimg,
-    },
-    {
-      id: 4,
-      title: 'Impreza Otwarcia',
-      date: '17.05.2025',
-      image: mrpolskaImg,
-    },
-  ]);
+import TicketPurchaseModal from './TicketPurchaseModal';
+
+function EventsSection({ onOpenCheckout }) {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Track window width for responsive carousel config
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Embla Carousel setup
+  const isMobile = windowWidth < 768;
   const isSingle = events.length === 1;
   const isDouble = events.length === 2;
   const isFew = events.length <= 2;
 
+  // On mobile with 2 events, use 'start' to show one full card
+  // On mobile with 1 event, use 'center' to center the single card
+  // On desktop, use 'center' for few events, 'start' for many
+  let carouselAlign = 'start';
+  if (isMobile) {
+    carouselAlign = isSingle ? 'center' : 'start';
+  } else {
+    carouselAlign = isFew ? 'center' : 'start';
+  }
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: !isFew,
-    align: isFew ? 'center' : 'start',
+    align: carouselAlign,
     slidesToScroll: 1,
-    breakpoints: {
-      '(min-width: 768px)': { slidesToScroll: 1 },
-      '(min-width: 1024px)': { slidesToScroll: 1 }
-    }
+    containScroll: 'trimSnaps',
+    dragFree: false
   }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
 
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
@@ -80,11 +78,13 @@ function EventsSection() {
 
     emblaApi.on('reInit', () => setScrollSnaps(emblaApi.scrollSnapList()));
 
-  }, [emblaApi, onSelect, events]);
+  }, [emblaApi, onSelect, events, isMobile, isFew, carouselAlign]);
 
-  // Pobieranie danych z Strapi
+  // Fetch events from Strapi
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetch('http://localhost:1337/api/wydarzenias?populate=*');
         const data = await response.json();
@@ -93,6 +93,7 @@ function EventsSection() {
           const formattedEvents = data.map((event) => ({
             id: event.id,
             title: event.NazwaWydarzenia || 'Brak tytułu',
+            rawDate: event.Data || null,
             date: event.Data
               ? new Date(event.Data).toLocaleDateString('pl-PL', {
                 day: '2-digit',
@@ -109,6 +110,7 @@ function EventsSection() {
           const formattedEvents = data.data.map((event) => ({
             id: event.id,
             title: event.NazwaWydarzenia || 'Brak tytułu',
+            rawDate: event.Data || null,
             date: event.Data
               ? new Date(event.Data).toLocaleDateString('pl-PL', {
                 day: '2-digit',
@@ -121,15 +123,72 @@ function EventsSection() {
               : 'https://images.unsplash.com/photo-1571115764595-644a1f56a55c?auto=format&fit=crop&w=350&h=500',
           }));
           setEvents(formattedEvents);
+        } else {
+          // No events found
+          setEvents([]);
         }
       } catch (error) {
         console.error('Błąd pobierania wydarzeń:', error);
-        // Pozostawiam hardcoded dane w przypadku błędu
+        setError('Nie udało się pobrać wydarzeń');
+        setEvents([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEvents();
   }, []);
+
+  const handleOpenModal = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="events-section">
+        <div className="events-header">
+          <h2 className="events-title">WYDARZENIA</h2>
+          <a href="/kalendarz" className="events-button">
+            <RiFacebookFill />
+            Kalendarz Wydarzeń
+          </a>
+        </div>
+        <div className="events-container">
+          <div className="loading">Ładowanie wydarzeń...</div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error or empty state
+  if (error || events.length === 0) {
+    return (
+      <section className="events-section">
+        <div className="events-header">
+          <h2 className="events-title">WYDARZENIA</h2>
+          <a href="/kalendarz" className="events-button">
+            <RiFacebookFill />
+            Kalendarz Wydarzeń
+          </a>
+        </div>
+        <div className="events-container">
+          <div className="empty-state">
+            <div className="empty-state-icon">🎶</div>
+            <h3 className="empty-state-title">
+              {error ? 'Ups! Coś poszło nie tak' : 'Brak zaplanowanych wydarzeń'}
+            </h3>
+            <p className="empty-state-text">
+              {error
+                ? 'Nie udało się załadować wydarzeń. Spróbuj odświeżyć stronę.'
+                : 'Aktualnie nie ma zaplanowanych wydarzeń. Zajrzyj tu wkrótce!'}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="events-section">
@@ -142,12 +201,12 @@ function EventsSection() {
       </div>
       <div className="events-container">
         <div className="container">
-          <div className={`wrapper embla-wrapper ${isFew ? 'embla-wrapper--few' : ''}`}>
+          <div className={`wrapper embla-wrapper ${isFew && !isMobile ? 'embla-wrapper--few' : ''}`}>
             <div className="embla" ref={emblaRef}>
-              <div className={`embla__container ${isFew ? 'embla__container--center' : ''}`}>
+              <div className={`embla__container ${isFew && !isMobile ? 'embla__container--center' : ''}`}>
                 {events.map((event) => (
                   <div
-                    className={`embla__slide ${isSingle ? 'embla__slide--single' : ''} ${isDouble ? 'embla__slide--double' : ''}`}
+                    className={`embla__slide ${isSingle && !isMobile ? 'embla__slide--single' : ''} ${isDouble && !isMobile ? 'embla__slide--double' : ''}`}
                     key={event.id}
                   >
                     <div className="card">
@@ -158,9 +217,14 @@ function EventsSection() {
                         <h3 className="card-title">{event.title}</h3>
                         <p className="card-date">{event.date}</p>
                         <div className="card-footer">
-                          <button className="card-button">Kup bilet</button>
+                          <button
+                            className="card-button"
+                            onClick={() => handleOpenModal(event)}
+                          >
+                            Kup bilet
+                          </button>
                           <Link
-                            to={`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.title)}`}
+                            to={`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.title)}&eventDate=${encodeURIComponent(event.rawDate || '')}&eventImage=${encodeURIComponent(event.image || '')}`}
                             className="card-button secondary"
                           >
                             Rezerwacja loży
@@ -201,6 +265,17 @@ function EventsSection() {
           </div>
         </div>
       </div>
+
+      <TicketPurchaseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        eventName={selectedEvent?.title}
+        eventId={selectedEvent?.id}
+        eventDate={selectedEvent?.rawDate}
+        eventImage={selectedEvent?.image}
+        ticketPrice={50}
+        onOpenCheckout={onOpenCheckout}
+      />
     </section>
   );
 }

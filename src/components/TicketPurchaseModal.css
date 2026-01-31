@@ -1,0 +1,299 @@
+.ticket-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
+}
+
+.ticket-modal-content {
+    background: #111a0b;
+    border: 1px solid rgba(254, 222, 0, 0.3);
+    border-radius: 16px;
+    padding: 30px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.ticket-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ticket-modal-close:hover {
+    color: #fede00;
+    transform: scale(1.1);
+}
+
+.ticket-modal-header {
+    margin-bottom: 25px;
+}
+
+.ticket-modal-header h2 {
+    color: #fede00;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
+}
+
+.ticket-modal-header .event-name {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.ticket-modal-body {
+    margin-bottom: 20px;
+}
+
+.ticket-counter-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px;
+    background: rgba(254, 222, 0, 0.05);
+    border: 1px solid rgba(254, 222, 0, 0.2);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.ticket-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fede00;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.ticket-icon-old {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.counter-btn {
+    background: transparent;
+    border: 2px solid #fede00;
+    color: #fede00;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.counter-btn:hover:not(:disabled) {
+    background: #fede00;
+    color: #111a0b;
+    transform: scale(1.1);
+}
+
+.counter-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.quantity-display {
+    font-size: 22px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    color: #fff;
+}
+
+.ticket-price {
+    text-align: right;
+}
+
+.price-value {
+    font-size: 24px;
+    font-weight: 900;
+    color: #fede00;
+}
+
+/* Error Message */
+.ticket-error-message {
+    background: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #ff4d4d;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Error Banner */
+.modal-error-banner {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(255, 77, 77, 0.15);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.modal-error-banner .error-icon {
+    font-size: 20px;
+    color: #ff4d4d;
+    flex-shrink: 0;
+}
+
+.modal-error-banner .error-text {
+    color: #ff4d4d;
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.modal-error-banner .error-close {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.modal-error-banner .error-close:hover {
+    opacity: 0.7;
+}
+
+/* STICKY FOOTER ACTIONS */
+.ticket-modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, #111a0b 85%, transparent);
+    padding: 20px 0 0;
+    margin: 20px -30px 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Primary CTA - Checkout */
+.btn-pay {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, #fede00 0%, #ffd700 100%);
+    color: #111a0b;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 25px rgba(254, 222, 0, 0.35);
+}
+
+.btn-pay:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(254, 222, 0, 0.45);
+}
+
+.btn-pay:active {
+    transform: translateY(0);
+}
+
+/* Secondary Actions */
+.ticket-secondary-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-cart,
+.btn-lounge-redirect {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-cart {
+    background: transparent;
+    border: 2px solid rgba(254, 222, 0, 0.6);
+    color: #fede00;
+}
+
+.btn-cart:hover {
+    background: rgba(254, 222, 0, 0.1);
+    border-color: #fede00;
+    transform: translateY(-1px);
+}
+
+.btn-lounge-redirect {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ccc;
+}
+
+.btn-lounge-redirect:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ticket-modal-content {
+        padding: 25px;
+    }
+
+    .ticket-modal-actions {
+        margin: 20px -25px 0;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .ticket-secondary-actions {
+        flex-direction: column;
+    }
+}

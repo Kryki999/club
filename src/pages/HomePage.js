@@ -9,11 +9,11 @@ import AboutSection from '../components/AboutSection';
 import ReviewsSection from '../components/ReviewsSection';
 import LocationSection from '../components/LocationSection';
 
-function HomePage({ onOpenReservation }) {
+function HomePage({ onOpenReservation, onOpenCheckout }) {
     return (
         <div className="HomePage">
             <Banner />
-            <EventsSection />
+            <EventsSection onOpenCheckout={onOpenCheckout} />
             <ServicesSection />
             <InstagramSection />
             <MarqueeBanner />

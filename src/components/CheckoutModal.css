@@ -1,0 +1,309 @@
+.checkout-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3500;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.checkout-modal-content {
+    background: #1a1a1a;
+    border: 1px solid rgba(254, 222, 0, 0.3);
+    border-radius: 16px;
+    padding: 35px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.checkout-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 32px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.checkout-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fede00;
+}
+
+.checkout-modal-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fede00;
+    margin: 0 0 25px 0;
+    letter-spacing: 0.5px;
+}
+
+/* Order Summary */
+.checkout-summary {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 25px;
+}
+
+.summary-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.summary-event {
+    font-size: 16px;
+    color: #fede00;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid rgba(254, 222, 0, 0.3);
+    font-size: 18px;
+    font-weight: 700;
+    color: #fede00;
+}
+
+/* Form */
+.checkout-form {
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #fff;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #fede00;
+    box-shadow: 0 0 15px rgba(254, 222, 0, 0.1);
+    transform: scale(1.01);
+}
+
+.form-checkbox {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #fede00;
+}
+
+.form-checkbox label {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.form-checkbox a {
+    color: #fede00;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.form-checkbox a:hover {
+    color: #ffd700;
+}
+
+/* Error Banner */
+.modal-error-banner {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(255, 77, 77, 0.15);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.modal-error-banner .error-icon {
+    font-size: 20px;
+    color: #ff4d4d;
+    flex-shrink: 0;
+}
+
+.modal-error-banner .error-text {
+    color: #ff4d4d;
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.modal-error-banner .error-close {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.modal-error-banner .error-close:hover {
+    opacity: 0.7;
+}
+
+/* Actions */
+.checkout-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkout-btn-pay {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #fede00, #ffd700);
+    color: #111a0b;
+    box-shadow: 0 8px 25px rgba(254, 222, 0, 0.35);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkout-btn-pay:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(254, 222, 0, 0.45);
+}
+
+.checkout-btn-pay:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.checkout-btn-pay.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.checkout-btn-cancel {
+    padding: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: transparent;
+    color: #ccc;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkout-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.checkout-btn-cancel:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-modal-content {
+        padding: 25px;
+    }
+
+    .checkout-modal-title {
+        font-size: 22px;
+    }
+}

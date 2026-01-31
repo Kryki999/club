@@ -4,10 +4,13 @@ import { FiPhone } from 'react-icons/fi';
 import { RiInstagramFill } from 'react-icons/ri';
 import { AiFillFacebook, AiFillTikTok } from 'react-icons/ai';
 import './Navigation.css';
+import CartIcon from './CartIcon';
+import CartModal from './CartModal';
 
-function Navigation({ onOpenReservation }) {
+function Navigation({ onOpenReservation, onOpenCheckout }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -55,6 +58,9 @@ function Navigation({ onOpenReservation }) {
                     <span className="phone-text">+48 753 333 456</span>
                     <span className="phone-rezerwuj">REZERWUJ</span>
                 </a>
+                <div style={{ marginRight: '15px' }}>
+                    <CartIcon onClick={() => setIsCartOpen(true)} />
+                </div>
                 <button className="hamburger" onClick={toggleMenu}>
                     <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
                     <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
@@ -76,7 +82,9 @@ function Navigation({ onOpenReservation }) {
                 <a href="/#galeria" className="mobile-link" onClick={toggleMenu}>Galeria</a>
                 <a href="/#kontakt" className="mobile-link" onClick={toggleMenu}>Kontakt</a>
             </div>
-        </nav>
+
+            <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onOpenCheckout={onOpenCheckout} />
+        </nav >
     );
 }
 

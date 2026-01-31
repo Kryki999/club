@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
 import './EventPickerModal.css';
 
 const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
+    const { cart } = useCart();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedEventId, setSelectedEventId] = useState(null);
+    const [alertMessage, setAlertMessage] = useState(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -32,6 +36,64 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
         }
     };
 
+    const normalizeEventId = (id) => id ? String(id) : null;
+
+    const handleEventClick = (event) => {
+        setSelectedEventId(event.id);
+
+        console.log('🔍 EventPickerModal - handleEventClick:', {
+            eventId: event.id,
+            eventName: event.name,
+            cartEventId: cart.eventId,
+            cartEventName: cart.eventName,
+            hasCartItems: !!cart.eventId
+        });
+
+        // Check if cart has items
+        if (cart.eventId) {
+            const cartEventId = normalizeEventId(cart.eventId);
+            const clickedEventId = normalizeEventId(event.id);
+
+            // Check by ID first, then by name as fallback
+            const isSameById = cartEventId === clickedEventId;
+            const isSameByName = cart.eventName && event.name &&
+                cart.eventName.toLowerCase().trim() === event.name.toLowerCase().trim();
+            const isSameEvent = isSameById || isSameByName;
+
+            console.log('🔍 Comparison:', {
+                cartEventId,
+                clickedEventId,
+                isSameById,
+                isSameByName,
+                isSameEvent
+            });
+
+            if (isSameEvent) {
+                // Same event - proceed to reservation without alert
+                console.log('✅ Same event - allowing selection');
+                setAlertMessage(null);
+                // Use cart's eventId if matched by name to ensure consistency
+                const eventToPass = isSameByName && !isSameById
+                    ? { ...event, id: cart.eventId }
+                    : event;
+                console.log('📤 Passing event with id:', eventToPass.id);
+                onSelectEvent(eventToPass);
+            } else {
+                // Different event - show error
+                console.log('❌ Different event - blocking selection');
+                setAlertMessage({
+                    type: 'error',
+                    text: `Masz już produkty z "${cart.eventName}" w koszyku. Usuń je lub przejdź do płatności aby zarezerwować lożę na inne wydarzenie.`
+                });
+            }
+        } else {
+            // Empty cart - allow selection
+            console.log('✅ Empty cart - allowing selection');
+            setAlertMessage(null);
+            onSelectEvent(event);
+        }
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -40,6 +102,20 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
                 <button className="event-picker-close" onClick={onClose}>&times;</button>
                 <h2 className="event-picker-title">Wybierz wydarzenie</h2>
                 <p className="event-picker-subtitle">Wybierz datę, aby zobaczyć dostępne loże</p>
+
+                {alertMessage && (
+                    <div className={`event-picker-alert event-picker-alert-${alertMessage.type}`}>
+                        <span>{alertMessage.text}</span>
+                        {alertMessage.type === 'error' && (
+                            <button
+                                className="alert-close-btn"
+                                onClick={() => setAlertMessage(null)}
+                            >
+                                ×
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 {loading ? (
                     <div className="event-picker-loading">Ładowanie wydarzeń...</div>
@@ -52,7 +128,7 @@ const EventPickerModal = ({ isOpen, onSelectEvent, onClose }) => {
                                 <div
                                     key={event.id}
                                     className="event-item"
-                                    onClick={() => onSelectEvent(event)}
+                                    onClick={() => handleEventClick(event)}
                                 >
                                     {event.image && (
                                         <img

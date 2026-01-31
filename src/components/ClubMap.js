@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BookingModal from './BookingModal';
 
-const ClubMap = ({ eventId }) => {
+const ClubMap = ({ eventId, eventName, eventDate, eventImage, onOpenCheckout }) => {
     const [tables, setTables] = useState([]);
     const [confirmedTableIds, setConfirmedTableIds] = useState([]);
     const [pendingTableIds, setPendingTableIds] = useState([]);
@@ -11,7 +11,6 @@ const ClubMap = ({ eventId }) => {
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
-    const [eventName, setEventName] = useState('');
 
 
 
@@ -67,11 +66,9 @@ const ClubMap = ({ eventId }) => {
                 const response = await fetch(`${apiUrl}/api/wydarzenias/${eventId}`);
                 const data = await response.json();
 
-                const eventData = data.data?.attributes || data.data || data;
-                setEventName(eventData.NazwaWydarzenia || `Event #${eventId}`);
+                // Event name is now passed as prop, no need to fetch or set it
             } catch (error) {
                 console.error("Error fetching event name:", error);
-                setEventName(`Event #${eventId}`);
             }
         };
 
@@ -178,6 +175,72 @@ const ClubMap = ({ eventId }) => {
                 className="club-map-svg"
                 onMouseMove={handleMouseMove}
             >
+                {/* SCENA - Half square on far left */}
+                <rect
+                    x="10"
+                    y="140"
+                    width="70"
+                    height="120"
+                    fill="rgba(50, 50, 50, 0.8)"
+                    stroke="#fede00"
+                    strokeWidth="2"
+                    rx="5"
+                />
+                <text
+                    x="45"
+                    y="205"
+                    fill="#fede00"
+                    fontSize="13"
+                    fontWeight="bold"
+                    textAnchor="middle"
+                    style={{ textTransform: 'uppercase' }}
+                >
+                    SCENA
+                </text>
+
+                {/* BAR - Semicircle on right side */}
+                <path
+                    d="M 560 110 Q 595 200 560 290 L 535 290 Q 560 200 535 110 Z"
+                    fill="rgba(80, 50, 30, 0.8)"
+                    stroke="#fede00"
+                    strokeWidth="2"
+                />
+                <text
+                    x="560"
+                    y="205"
+                    fill="#fede00"
+                    fontSize="12"
+                    fontWeight="bold"
+                    textAnchor="middle"
+                    style={{ textTransform: 'uppercase' }}
+                >
+                    BAR
+                </text>
+
+                {/* PARKIET - Center dance floor */}
+                <ellipse
+                    cx="300"
+                    cy="200"
+                    rx="120"
+                    ry="75"
+                    fill="rgba(17, 26, 11, 0.3)"
+                    stroke="rgba(254, 222, 0, 0.3)"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                />
+                <text
+                    x="300"
+                    y="205"
+                    fill="rgba(254, 222, 0, 0.5)"
+                    fontSize="16"
+                    fontWeight="bold"
+                    textAnchor="middle"
+                    style={{ textTransform: 'uppercase', letterSpacing: '2px' }}
+                >
+                    PARKIET
+                </text>
+
+                {/* LOŻE - Render lounges from backend (top and bottom) */}
                 {tables.map(table => {
                     const isConfirmed = confirmedTableIds.includes(table.id);
                     const isPending = pendingTableIds.includes(table.id);
@@ -185,9 +248,9 @@ const ClubMap = ({ eventId }) => {
                     // Kolory: zielony = wolny, orange = pending, szary = confirmed
                     let fillColor = '#4caf50'; // zielony (available)
                     if (isPending) fillColor = '#FFA500'; // pomarańczowy (pending)
-                    if (isConfirmed) fillColor = '#ccc'; // szary (confirmed)
+                    if (isConfirmed) fillColor = '#999'; // szary (confirmed)
 
-                    const strokeColor = table.zone?.color || '#000';
+                    const strokeColor = table.zone?.color || '#fede00';
 
                     const commonProps = {
                         fill: fillColor,
@@ -205,7 +268,7 @@ const ClubMap = ({ eventId }) => {
                                 key={table.id}
                                 cx={table.x}
                                 cy={table.y}
-                                r={table.radius || 20}
+                                r={table.radius || 10}
                                 {...commonProps}
                             />
                         );
@@ -215,8 +278,9 @@ const ClubMap = ({ eventId }) => {
                                 key={table.id}
                                 x={table.x}
                                 y={table.y}
-                                width={table.width || 40}
-                                height={table.height || 40}
+                                width={table.width || 24}
+                                height={table.height || 24}
+                                rx="4"
                                 {...commonProps}
                             />
                         );
@@ -249,6 +313,9 @@ const ClubMap = ({ eventId }) => {
                 table={selectedTable}
                 eventId={eventId}
                 eventName={eventName}
+                eventDate={eventDate}
+                eventImage={eventImage}
+                onOpenCheckout={onOpenCheckout}
             />
         </div>
     );

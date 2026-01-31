@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ClubMap from '../components/ClubMap';
+import EventInfoCard from '../components/EventInfoCard';
 import './ReservationPage.css';
 
-function ReservationPage({ onOpenReservation }) {
+function ReservationPage({ onOpenReservation, onOpenCheckout }) {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const initialEventId = queryParams.get('eventId');
     const initialEventName = queryParams.get('eventName');
+    const initialEventDate = queryParams.get('eventDate');
+    const initialEventImage = queryParams.get('eventImage');
 
-    const [selectedEvent, setSelectedEvent] = useState(initialEventId ? { id: initialEventId, name: initialEventName || 'Event' } : null);
+    const [selectedEvent, setSelectedEvent] = useState(initialEventId ? {
+        id: initialEventId,
+        name: initialEventName || 'Event',
+        date: initialEventDate,
+        image: initialEventImage
+    } : null);
 
     // Reset scroll position to top on page mount
     useEffect(() => {
@@ -21,8 +29,16 @@ function ReservationPage({ onOpenReservation }) {
     useEffect(() => {
         const eventId = queryParams.get('eventId');
         const eventName = queryParams.get('eventName');
+        const eventDate = queryParams.get('eventDate');
+        const eventImage = queryParams.get('eventImage');
+
         if (eventId) {
-            setSelectedEvent({ id: eventId, name: eventName || 'Event' });
+            setSelectedEvent({
+                id: eventId,
+                name: eventName || 'Event',
+                date: eventDate,
+                image: eventImage
+            });
         } else {
             // Optional: Redirect to home or show error if no event selected
             // navigate('/');
@@ -54,19 +70,45 @@ function ReservationPage({ onOpenReservation }) {
 
             <div className="reservation-container">
                 <div className="booking-interface">
-                    <div className="selected-event-card">
-                        <div className="event-info">
-                            <span>Wybrane wydarzenie:</span>
-                            <h3>{selectedEvent.name}</h3>
-                            {selectedEvent.date && <p>{new Date(selectedEvent.date).toLocaleDateString()}</p>}
-                        </div>
-                        <button className="secondary-btn" onClick={onOpenReservation}>
+                    <div className="event-section">
+                        <EventInfoCard
+                            eventName={selectedEvent.name}
+                            eventDate={selectedEvent.date ? new Date(selectedEvent.date).toLocaleDateString('pl-PL', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            }) : ''}
+                            eventImage={selectedEvent.image}
+                        />
+
+                        <button className="change-event-btn" onClick={onOpenReservation}>
                             Zmień wydarzenie
                         </button>
                     </div>
 
+                    <div className="map-legend">
+                        <div className="legend-item">
+                            <div className="legend-color legend-available"></div>
+                            <span>Wolne</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color legend-pending"></div>
+                            <span>W trakcie rezerwacji</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color legend-reserved"></div>
+                            <span>Zarezerwowane</span>
+                        </div>
+                    </div>
+
                     <div className="map-wrapper">
-                        <ClubMap eventId={selectedEvent.id} eventName={selectedEvent.name} />
+                        <ClubMap
+                            eventId={selectedEvent.id}
+                            eventName={selectedEvent.name}
+                            eventDate={selectedEvent.date}
+                            eventImage={selectedEvent.image}
+                            onOpenCheckout={onOpenCheckout}
+                        />
                     </div>
                 </div>
             </div>

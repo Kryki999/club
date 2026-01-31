@@ -1,0 +1,90 @@
+/* Cart Icon Container */
+.cart-icon-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-icon-container:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.cart-icon-container:active {
+    transform: translateY(0);
+}
+
+/* Shopping Bag SVG */
+.cart-icon-svg {
+    width: 28px;
+    height: 28px;
+    color: #888;
+    /* Gray when empty */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.cart-icon-svg.cart-icon-filled {
+    color: #4caf50;
+    /* Green when filled */
+}
+
+.cart-icon-container:hover .cart-icon-svg {
+    transform: scale(1.05);
+}
+
+/* Badge */
+.cart-icon-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: linear-gradient(135deg, #fede00, #ffd700);
+    color: #111a0b;
+    font-size: 11px;
+    font-weight: 900;
+    border-radius: 10px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    box-shadow: 0 2px 8px rgba(254, 222, 0, 0.4);
+    animation: badgePop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Pulse animation when item added */
+.cart-icon-container.item-added .cart-icon-badge {
+    animation: badgePop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+        badgePulse 1s ease-in-out;
+}
+
+@keyframes badgePulse {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(254, 222, 0, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 2px 16px rgba(254, 222, 0, 0.8);
+    }
+}

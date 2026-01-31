@@ -24,11 +24,11 @@
 
 .booking-modal-content {
     background: #1a1a1a;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 500px;
+    border-radius: 16px;
+    padding: 35px;
+    max-width: 550px;
     width: 95%;
-    max-height: 90vh;
+    max-height: 88vh;
     overflow-y: auto;
     position: relative;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
@@ -74,28 +74,27 @@
 }
 
 .booking-modal-title {
-    margin: 0 0 30px 0;
-    font-size: 28px;
-    font-weight: 800;
+    margin: 0 0 25px 0;
+    font-size: 26px;
+    font-weight: 700;
     color: #fede00;
-    font-family: 'Young Heart', sans-serif;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .booking-modal-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 30px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .booking-info-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
 .booking-info-row:last-child {
@@ -107,9 +106,9 @@
 .booking-info-label {
     font-weight: 500;
     color: #888;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .booking-info-value {
@@ -118,18 +117,198 @@
     font-size: 16px;
 }
 
+/* Cart Sync Banner */
+.cart-sync-banner {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.cart-sync-banner .banner-icon {
+    font-size: 24px;
+    color: #4caf50;
+    flex-shrink: 0;
+}
+
+.cart-sync-banner .banner-text {
+    color: #4caf50;
+    font-size: 14px;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.cart-sync-banner .banner-text strong {
+    color: #66bb6a;
+}
+
+.cart-sync-banner .banner-price {
+    font-weight: 700;
+    color: #66bb6a;
+    margin-top: 4px;
+}
+
+/* Warning Section */
+.booking-warning {
+    display: flex;
+    gap: 10px;
+    padding: 12px 15px;
+    background: rgba(255, 193, 7, 0.12);
+    border: 1px solid rgba(255, 193, 7, 0.25);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.warning-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.warning-text {
+    color: #ffc107;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.warning-text strong {
+    color: #ffd54f;
+}
+
+/* Ticket Selection Section */
+.booking-ticket-section {
+    background: rgba(254, 222, 0, 0.05);
+    border: 1px solid rgba(254, 222, 0, 0.2);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.ticket-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.ticket-icon {
+    font-size: 22px;
+}
+
+.ticket-section-header h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #fede00;
+    font-weight: 700;
+}
+
+.ticket-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.ticket-counter-label {
+    font-size: 14px;
+    color: #ccc;
+    font-weight: 600;
+}
+
+.ticket-counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ticket-counter-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #fede00;
+    background: transparent;
+    color: #fede00;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.ticket-counter-btn:hover:not(:disabled) {
+    background: #fede00;
+    color: #111a0b;
+    transform: scale(1.1);
+}
+
+.ticket-counter-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.ticket-counter-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    min-width: 30px;
+    text-align: center;
+}
+
+.ticket-price-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: rgba(254, 222, 0, 0.1);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #fede00;
+}
+
+.booking-total {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.booking-total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.booking-total-row.grand-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fede00;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 2px solid rgba(254, 222, 0, 0.3);
+}
+
 .booking-modal-form {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .booking-form-group {
-    margin-bottom: 25px;
+    margin-bottom: 18px;
 }
 
 .booking-form-group label {
     display: block;
     margin-bottom: 10px;
-    font-weight: 600;
+    font-weight: 500;
     color: #ccc;
     font-size: 14px;
     text-transform: uppercase;
@@ -144,7 +323,7 @@
     border-radius: 10px;
     font-size: 16px;
     color: #fff;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
     box-sizing: border-box;
 }
 
@@ -153,6 +332,7 @@
     border-color: #fede00;
     background: rgba(0, 0, 0, 0.3);
     box-shadow: 0 0 15px rgba(254, 222, 0, 0.1);
+    transform: scale(1.01);
 }
 
 .booking-form-group input:disabled {
@@ -166,28 +346,86 @@
     color: #ff4d4d;
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     font-size: 14px;
     font-weight: 500;
 }
 
-.booking-modal-actions {
+/* Error Banner */
+.modal-error-banner {
     display: flex;
-    gap: 15px;
-    justify-content: stretch;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(255, 77, 77, 0.15);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.modal-error-banner .error-icon {
+    font-size: 20px;
+    color: #ff4d4d;
+    flex-shrink: 0;
+}
+
+.modal-error-banner .error-text {
+    color: #ff4d4d;
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.modal-error-banner .error-close {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.modal-error-banner .error-close:hover {
+    opacity: 0.7;
+}
+
+/* STICKY FOOTER ACTIONS */
+.booking-modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, #1a1a1a 85%, transparent);
+    padding: 25px 0 0;
+    margin: 20px -35px 0;
+    padding-left: 35px;
+    padding-right: 35px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
 .booking-btn {
-    flex: 1;
     padding: 16px 24px;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+}
+
+.booking-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.booking-btn:active:not(:disabled) {
+    transform: translateY(0);
 }
 
 .booking-btn-cancel {
@@ -202,36 +440,77 @@
 }
 
 .booking-btn-confirm {
-    background: linear-gradient(135deg, #fede00 0%, #ffd700 100%);
-    color: #111a0b;
-    box-shadow: 0 5px 15px rgba(254, 222, 0, 0.2);
+    background: transparent;
+    border: 2px solid rgba(254, 222, 0, 0.6);
+    color: #fede00;
+    font-size: 15px;
 }
 
 .booking-btn-confirm:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(254, 222, 0, 0.4);
+    background: rgba(254, 222, 0, 0.1);
+    border-color: #fede00;
 }
 
 .booking-btn-confirm.btn-disabled {
-    background: #333;
-    color: #666;
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
+}
+
+/* PRIMARY CTA - Checkout */
+.booking-btn-checkout {
+    width: 100%;
+    background: linear-gradient(135deg, #fede00 0%, #ffd700 100%);
+    color: #111a0b;
+    font-weight: 900;
+    font-size: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 25px rgba(254, 222, 0, 0.35);
+    border: none;
+}
+
+.booking-btn-checkout:hover:not(:disabled) {
+    box-shadow: 0 10px 30px rgba(254, 222, 0, 0.45);
+}
+
+/* SECONDARY ACTIONS */
+.booking-secondary-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.booking-secondary-actions .booking-btn {
+    flex: 1;
+    font-size: 15px;
+    padding: 14px;
+}
+
+.booking-btn.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .booking-modal-content {
-        padding: 20px;
+        padding: 25px;
         width: 95%;
+        max-width: 100%;
     }
 
     .booking-modal-title {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .booking-modal-actions {
+        margin: 20px -25px 0;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .booking-secondary-actions {
         flex-direction: column;
     }
 

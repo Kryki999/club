@@ -6,10 +6,13 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ReservationPage from './pages/ReservationPage';
 import EventPickerModal from './components/EventPickerModal';
+import CheckoutModal from './components/CheckoutModal';
+import { CartProvider } from './context/CartContext';
 
 function AppContent() {
   const navigate = useNavigate();
   const [isEventPickerOpen, setIsEventPickerOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleOpenReservation = () => {
     setIsEventPickerOpen(true);
@@ -17,15 +20,19 @@ function AppContent() {
 
   const handleSelectEvent = (event) => {
     setIsEventPickerOpen(false);
-    navigate(`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.name)}`);
+    navigate(`/reservation?eventId=${event.id}&eventName=${encodeURIComponent(event.name)}&eventDate=${encodeURIComponent(event.date || '')}&eventImage=${encodeURIComponent(event.image ? `${process.env.REACT_APP_STRAPI_API_URL || 'http://localhost:1337'}${event.image}` : '')}`);
+  };
+
+  const handleOpenCheckout = () => {
+    setIsCheckoutOpen(true);
   };
 
   return (
     <div className="App">
-      <Navigation onOpenReservation={handleOpenReservation} />
+      <Navigation onOpenReservation={handleOpenReservation} onOpenCheckout={handleOpenCheckout} />
       <Routes>
-        <Route path="/" element={<HomePage onOpenReservation={handleOpenReservation} />} />
-        <Route path="/reservation" element={<ReservationPage onOpenReservation={handleOpenReservation} />} />
+        <Route path="/" element={<HomePage onOpenReservation={handleOpenReservation} onOpenCheckout={handleOpenCheckout} />} />
+        <Route path="/reservation" element={<ReservationPage onOpenReservation={handleOpenReservation} onOpenCheckout={handleOpenCheckout} />} />
       </Routes>
       <Footer />
 
@@ -34,11 +41,14 @@ function AppContent() {
         onSelectEvent={handleSelectEvent}
         onClose={() => setIsEventPickerOpen(false)}
       />
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
     </div>
   );
 }
-
-import { CartProvider } from './context/CartContext';
 
 function App() {
   return (

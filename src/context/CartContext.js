@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 const CartContext = createContext();
 
@@ -10,132 +10,147 @@ export const useCart = () => {
     return context;
 };
 
+// Helper function to normalize eventId to string for consistent comparison
+const normalizeEventId = (eventId) => {
+    return eventId ? String(eventId) : null;
+};
+
 export const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState(() => {
-        const savedCart = localStorage.getItem('hood_cart');
-        return savedCart ? JSON.parse(savedCart) : {
-            eventId: null,
-            eventName: '',
-            tickets: { quantity: 0, unitPrice: 0, total: 0 },
-            reservation: null, // { tableId, name, minSpend }
-            totalAmount: 0
-        };
+    const [cart, setCart] = useState({
+        eventId: null,
+        eventName: null,
+        eventImage: null,
+        eventDate: null,
+        ticket: null,
+        reservation: null,
+        totalAmount: 0
     });
 
-    useEffect(() => {
-        localStorage.setItem('hood_cart', JSON.stringify(cart));
-    }, [cart]);
-
-    const addTickets = (eventId, eventName, quantity, unitPrice) => {
-        setCart(prev => {
-            // New cart if eventId changes
-            const baseCart = prev.eventId === eventId ? prev : {
-                eventId,
-                eventName,
-                tickets: { quantity: 0, unitPrice: 0, total: 0 },
-                reservation: null,
-                totalAmount: 0
-            };
-
-            const newQuantity = baseCart.tickets.quantity + quantity;
-            const newTotal = newQuantity * unitPrice;
-            const reservationTotal = baseCart.reservation ? parseFloat(baseCart.reservation.minSpend) : 0;
-
-            return {
-                ...baseCart,
-                tickets: { quantity: newQuantity, unitPrice, total: newTotal },
-                totalAmount: newTotal + reservationTotal
-            };
-        });
+    const calculateTotal = (ticket, reservation) => {
+        const ticketAmount = ticket ? ticket.totalAmount : 0;
+        const reservationAmount = reservation ? reservation.minSpend : 0;
+        return ticketAmount + reservationAmount;
     };
 
-    const addReservation = (eventId, eventName, table) => {
+    const addTicket = useCallback((eventId, ticket, eventName = null, eventImage = null, eventDate = null) => {
+        const normalizedEventId = normalizeEventId(eventId);
+        let success = true;
+        let errorMessage = '';
+
         setCart(prev => {
-            const baseCart = prev.eventId === eventId ? prev : {
-                eventId,
-                eventName,
-                tickets: { quantity: 0, unitPrice: 0, total: 0 },
-                reservation: null,
-                totalAmount: 0
-            };
+            const prevNormalized = normalizeEventId(prev.eventId);
 
-            const reservationTotal = parseFloat(table.minSpend);
-            const ticketsTotal = baseCart.tickets.total;
+            // Only block if trying to add ticket from DIFFERENT event
+            if (prevNormalized && prevNormalized !== normalizedEventId) {
+                success = false;
+                const currentEventName = prev.eventName || `Wydarzenia #${prev.eventId}`;
+                errorMessage = `Masz już produkty z "${currentEventName}" w koszyku. Usuń je lub przejdź do płatności aby dodać bilety na inne wydarzenie.`;
+                return prev;
+            }
 
-            return {
-                ...baseCart,
-                reservation: {
-                    tableId: table.id,
-                    name: table.name,
-                    minSpend: table.minSpend
-                },
-                totalAmount: ticketsTotal + reservationTotal
-            };
-        });
-    };
-
-    const setTickets = (eventId, eventName, quantity, unitPrice) => {
-        setCart(prev => {
-            const baseCart = prev.eventId === eventId ? prev : {
-                eventId,
-                eventName,
-                tickets: { quantity: 0, unitPrice: 0, total: 0 },
-                reservation: null,
-                totalAmount: 0
-            };
-
-            const newTotal = quantity * unitPrice;
-            const reservationTotal = baseCart.reservation ? parseFloat(baseCart.reservation.minSpend) : 0;
-
-            return {
-                ...baseCart,
-                tickets: { quantity, unitPrice, total: newTotal },
-                totalAmount: newTotal + reservationTotal
-            };
-        });
-    };
-
-    const removeTickets = () => {
-        setCart(prev => {
-            const reservationTotal = prev.reservation ? parseFloat(prev.reservation.minSpend) : 0;
+            // Same event or no event - allow adding tickets
+            const newTotal = calculateTotal(ticket, prev.reservation);
             return {
                 ...prev,
-                tickets: { quantity: 0, unitPrice: 0, total: 0 },
-                totalAmount: reservationTotal
+                eventId: normalizedEventId,
+                eventName: prev.eventName || eventName,
+                eventImage: prev.eventImage || eventImage,
+                eventDate: prev.eventDate || eventDate,
+                ticket: { ...ticket },
+                totalAmount: newTotal
             };
         });
-    };
 
-    const removeReservation = () => {
+        return { success, error: errorMessage };
+    }, []);
+
+    const addReservation = useCallback((eventId, reservation, eventName = null, eventImage = null, eventDate = null) => {
+        const normalizedEventId = normalizeEventId(eventId);
+        let success = true;
+        let errorMessage = '';
+
         setCart(prev => {
+            const prevNormalized = normalizeEventId(prev.eventId);
+
+            // Only block if trying to add reservation from DIFFERENT event
+            if (prevNormalized && prevNormalized !== normalizedEventId) {
+                success = false;
+                const currentEventName = prev.eventName || `Wydarzenia #${prev.eventId}`;
+                errorMessage = `Masz już produkty z "${currentEventName}" w koszyku. Usuń je lub przejdź do płatności aby zarezerwować lożę na inne wydarzenie.`;
+                return prev;
+            }
+
+            // Same event or no event - allow adding reservation
+            const newTotal = calculateTotal(prev.ticket, reservation);
             return {
                 ...prev,
-                reservation: null,
-                totalAmount: prev.tickets.total
+                eventId: normalizedEventId,
+                eventName: prev.eventName || eventName,
+                eventImage: prev.eventImage || eventImage,
+                eventDate: prev.eventDate || eventDate,
+                reservation: { ...reservation },
+                totalAmount: newTotal
             };
         });
-    };
 
-    const clearCart = () => {
+        return { success, error: errorMessage };
+    }, []);
+
+    const removeTicket = useCallback(() => {
+        setCart(prev => {
+            const newTotal = calculateTotal(null, prev.reservation);
+            const hasItems = !!prev.reservation;
+            return {
+                ...prev,
+                eventId: hasItems ? prev.eventId : null,
+                eventName: hasItems ? prev.eventName : null,
+                eventImage: hasItems ? prev.eventImage : null,
+                eventDate: hasItems ? prev.eventDate : null,
+                ticket: null,
+                totalAmount: newTotal
+            };
+        });
+    }, []);
+
+    const removeReservation = useCallback(() => {
+        setCart(prev => {
+            const newTotal = calculateTotal(prev.ticket, null);
+            const hasItems = !!prev.ticket;
+            return {
+                ...prev,
+                eventId: hasItems ? prev.eventId : null,
+                eventName: hasItems ? prev.eventName : null,
+                eventImage: hasItems ? prev.eventImage : null,
+                eventDate: hasItems ? prev.eventDate : null,
+                reservation: null,
+                totalAmount: newTotal
+            };
+        });
+    }, []);
+
+    const clearCart = useCallback(() => {
         setCart({
             eventId: null,
-            eventName: '',
-            tickets: { quantity: 0, unitPrice: 0, total: 0 },
+            eventName: null,
+            eventImage: null,
+            eventDate: null,
+            ticket: null,
             reservation: null,
             totalAmount: 0
         });
-    };
+    }, []);
+
+    const value = useMemo(() => ({
+        cart,
+        addTicket,
+        addReservation,
+        removeTicket,
+        removeReservation,
+        clearCart
+    }), [cart, addTicket, addReservation, removeTicket, removeReservation, clearCart]);
 
     return (
-        <CartContext.Provider value={{
-            cart,
-            addTickets,
-            setTickets,
-            addReservation,
-            removeTickets,
-            removeReservation,
-            clearCart
-        }}>
+        <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
     );

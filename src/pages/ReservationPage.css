@@ -32,8 +32,15 @@
 }
 
 .reservation-container {
-    max-width: 1200px;
+    max-width: 700px;
     margin: 0 auto;
+}
+
+.booking-interface {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
 }
 
 .no-event-selected {
@@ -66,63 +73,89 @@
     box-shadow: 0 8px 20px rgba(255, 255, 255, 0.4);
 }
 
-.selected-event-card {
+.event-section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    padding: 25px 50px;
-    border-radius: 20px;
-    margin-bottom: 50px;
-    border: 1px solid rgba(254, 222, 0, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    width: 100%;
 }
 
-.event-info span {
-    font-size: 14px;
-    color: #fede00;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    letter-spacing: 1px;
+.event-section .event-info-card {
+    margin-bottom: 0;
 }
 
-.event-info h3 {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0;
-    color: #fff;
-}
-
-.secondary-btn {
-    padding: 12px 25px;
+.change-event-btn {
+    width: 100%;
+    padding: 14px 40px;
     background: transparent;
     border: 2px solid #fede00;
     color: #fede00;
-    border-radius: 30px;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: 700;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-top: 15px;
 }
 
-.secondary-btn:hover {
+.change-event-btn:hover {
     background: #fede00;
     color: #111a0b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(254, 222, 0, 0.3);
+}
+
+.map-legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(254, 222, 0, 0.1);
+    width: 100%;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 2px solid rgba(254, 222, 0, 0.3);
+}
+
+.legend-available {
+    background-color: #4caf50;
+}
+
+.legend-pending {
+    background-color: #FFA500;
+}
+
+.legend-reserved {
+    background-color: #999;
+}
+
+.legend-item span {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
 }
 
 .map-wrapper {
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    max-width: 700px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 100%;
 }
 
 .club-map-container {
@@ -134,10 +167,11 @@
 .club-map-svg {
     width: 100%;
     height: auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(254, 222, 0, 0.2);
+    background: linear-gradient(135deg, rgba(17, 26, 11, 0.9) 0%, rgba(30, 30, 30, 0.9) 100%);
     cursor: default;
     display: block;
+    border-radius: 12px;
 }
 
 @media (max-width: 768px) {
@@ -158,5 +192,15 @@
 
     .map-wrapper {
         padding: 10px;
+    }
+
+    .map-legend {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .legend-item {
+        justify-content: center;
     }
 }

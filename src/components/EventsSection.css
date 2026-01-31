@@ -102,6 +102,7 @@
     flex: 0 0 100%;
     min-width: 0;
     padding-left: 20px;
+    padding-right: 10px;
     box-sizing: border-box;
 }
 
@@ -346,6 +347,46 @@
     color: #ff6b6b;
 }
 
+/* Empty State */
+.events-section .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.events-section .empty-state-icon {
+    font-size: 80px;
+    margin-bottom: 25px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.events-section .empty-state-title {
+    font-size: 28px;
+    color: #fede00;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-family: 'Poiret One', sans-serif;
+}
+
+.events-section .empty-state-text {
+    font-size: 16px;
+    color: #aaa;
+    line-height: 1.6;
+    font-family: 'Afacad', sans-serif;
+}
 
 /* Media Queries */
 @media (max-width: 1200px) {
@@ -386,16 +427,56 @@
     }
 
     .events-section .embla__slide {
-        padding-left: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
         flex: 0 0 100%;
     }
 
     .events-section .wrapper {
-        padding: 20px 0;
+        padding: 20px 10px;
         margin: 0 0 35px;
+    }
+
+    .events-section .embla {
+        padding: 10px 5px;
     }
 
     .events-section .wrapper .card {
         height: 450px;
+    }
+
+    /* Larger touch targets for dots */
+    .events-section .wrapper .embla__dot {
+        width: 18px;
+        height: 18px;
+        margin: 0 6px;
+    }
+
+    .events-section .wrapper .embla__dot--selected {
+        width: 35px;
+    }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+    .events-section .embla__slide {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .events-section .wrapper {
+        padding: 20px 8px;
+    }
+
+    .events-section .empty-state-icon {
+        font-size: 60px;
+    }
+
+    .events-section .empty-state-title {
+        font-size: 22px;
+    }
+
+    .events-section .empty-state-text {
+        font-size: 14px;
     }
 }
