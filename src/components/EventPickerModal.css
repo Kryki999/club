@@ -207,12 +207,16 @@
 @media (max-width: 768px) {
     .event-picker-overlay {
         z-index: 10000;
+        padding: 60px 10px 20px;
+        align-items: flex-start;
+        overflow-y: auto;
     }
 
     .event-picker-content {
         width: 95%;
         padding: 20px;
-        max-height: 90vh;
+        max-height: none;
+        margin: auto;
     }
 
     .event-picker-title {
